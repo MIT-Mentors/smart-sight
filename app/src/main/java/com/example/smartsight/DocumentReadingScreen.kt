@@ -16,20 +16,12 @@ import androidx.navigation.NavController
 @Composable
 fun DocumentReadingScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
-        // Top App Bar
+
+        // Top App Bar - without back button
         CenterAlignedTopAppBar(
             title = { Text("Document Reading", color = Color.White) },
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        painter = painterResource(id = android.R.drawable.ic_media_previous),
-                        contentDescription = "Back",
-                        tint = Color.White
-                    )
-                }
-            },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color(0xFF9C27B0)
+                containerColor = Color(0xFF9A7DFF) // Purple
             )
         )
 
@@ -41,18 +33,19 @@ fun DocumentReadingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Sample Image
+            // Sample Image (fits half of the screen width)
             Image(
-                painter = painterResource(id = R.drawable.sample_doc), // Add image in drawable
+                painter = painterResource(id = R.drawable.sample_doc), // Add your image in drawable
                 contentDescription = "Sample Document",
                 modifier = Modifier
-                    .size(250.dp)
+                    .fillMaxWidth()      // Fill the available width
+                    .weight(1f)           // Take up half the vertical space dynamically
                     .padding(8.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Response Box (empty for now)
+            // Response Box
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

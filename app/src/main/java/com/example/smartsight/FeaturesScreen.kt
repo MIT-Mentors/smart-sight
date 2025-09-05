@@ -2,6 +2,13 @@ package com.example.smartsight
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,14 +22,14 @@ fun FeaturesScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)), // Light gray background
+            .background(Color(0xFFEFEFEF)), // Light gray background
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF9C27B0)) // Purple header
+                .background(Color(0xFF9A7DFF)) // Purple header
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -35,70 +42,79 @@ fun FeaturesScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // First Row
+        // SOS Button - Center top
+        FeatureButton(
+            text = "SOS",
+            icon = Icons.Default.Warning, // Emergency warning icon
+            onClick = { /* SOS logic here */ }
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Second Row - Navigation and Object Detection
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            FeatureButton("SOS")
-            FeatureButton("Navigation")
+            FeatureButton(
+                text = "Navigation",
+                icon = Icons.Default.LocationOn,
+                onClick = { /* Navigation logic here */ }
+            )
+            FeatureButton(
+                text = "Object Detection",
+                icon = Icons.Default.Search,
+                onClick = { navController.navigate("objectDetection") }
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Second Row
+        // Third Row - Document Reading and Location Sharing
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // Object Detection
-            Button(
-                onClick = { navController.navigate("objectDetection") },
-                modifier = Modifier.size(120.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF9C27B0), // Purple background
-                    contentColor = Color.White          // White text
-                )
-            ) {
-                Text("Object Detection")
-            }
-
-            // Document Reading
-            Button(
-                onClick = { navController.navigate("documentReading") },
-                modifier = Modifier.size(120.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF9C27B0), // Purple background
-                    contentColor = Color.White          // White text
-                )
-            ) {
-                Text("Document Reading")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Third Row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            FeatureButton("Location Sharing")
-            FeatureButton("Coming Soon")
+            FeatureButton(
+                text = "Document Reading",
+                icon = Icons.Default.Description, // Document icon
+                onClick = { navController.navigate("documentReading") }
+            )
+            FeatureButton(
+                text = "Location Sharing",
+                icon = Icons.Default.Share,
+                onClick = { /* Location Sharing logic here */ }
+            )
         }
     }
 }
 
 @Composable
-fun FeatureButton(text: String) {
+fun FeatureButton(
+    text: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
+) {
     Button(
-        onClick = { /* No action for now */ },
+        onClick = onClick,
         modifier = Modifier.size(120.dp),
+        shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF9C27B0), // Purple background
+            containerColor = Color(0xFF9A7DFF), // Purple background
             contentColor = Color.White          // White text
         )
     ) {
-        Text(text = text, color = Color.White)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                modifier = Modifier.size(32.dp),
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = text, color = Color.White)
+        }
     }
 }

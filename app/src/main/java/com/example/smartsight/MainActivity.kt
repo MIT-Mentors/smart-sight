@@ -37,5 +37,16 @@ fun SmartSightApp() {
         composable("features") { FeaturesScreen(navController) }
         composable("documentReading") { DocumentReadingScreen(navController) }
         composable("objectDetection") { ObjectDetectionScreen(navController) }
+        composable(route = "Location"){
+            Location_Display(navController)
+        }
+        composable(route = "DropDown"){
+
+
+            DropDownScreen(navController)
+        }
+        composable(route = "AboutApp"){
+            About_Screen(navController)
+        }
     }
 }

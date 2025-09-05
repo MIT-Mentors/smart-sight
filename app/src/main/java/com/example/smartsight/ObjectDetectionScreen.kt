@@ -3,6 +3,10 @@ package com.example.smartsight
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,17 +29,33 @@ fun ObjectDetectionScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFF9A7DFF))
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "Menu",
+                tint = Color.Black,
+                modifier = Modifier.clickable {
+                    navController.navigate("DropDown")
+                }
+            )
+
             Text(
                 text = "Object Detection",
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.White
+                fontSize = 20.sp,
+                color = Color.Black
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(28.dp)
+                    .background(Color.Black, shape = RoundedCornerShape(4.dp))
             )
         }
 
@@ -78,7 +98,7 @@ fun ObjectDetectionScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
-                .height(100.dp)
+                .height(200.dp)
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {

@@ -79,7 +79,7 @@ fun FeaturesScreen(navController: NavController) {
             FeatureButton(
                 text = "Navigation",
                 icon = Icons.Default.LocationOn,
-                onClick = { /* Navigation logic here */ }
+                onClick = { navController.navigate("navigation")  }
             )
             FeatureButton(
                 text = "Object Detection",

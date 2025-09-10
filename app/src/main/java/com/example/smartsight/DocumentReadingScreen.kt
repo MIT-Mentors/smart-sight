@@ -20,7 +20,8 @@ import androidx.navigation.NavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DocumentReadingScreen(navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()
+        .background(Color(0xFFEFEFEF))) {
 
         // Top App Bar - without back button
         Row(

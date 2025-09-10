@@ -1,6 +1,7 @@
 package com.example.smartsight
 
 import android.Manifest
+import android.R
 import android.content.ContentResolver
 import android.provider.ContactsContract
 import androidx.compose.foundation.background
@@ -111,9 +112,9 @@ fun Location_Display(navController: NavController) {
             OutlinedButton(
                 onClick = { showDialog = true },
                 shape = RoundedCornerShape(6.dp),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFFD9CFFF))
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))
             ) {
-                Text("Create List")
+                Text("Create List", color = Color.Black)
             }
         }
 
@@ -141,13 +142,13 @@ fun Location_Display(navController: NavController) {
                 },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(6.dp),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFFD9CFFF))
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))
             ) {
-                Text("Select a Contact")
+                Text("Select a Contact",color = Color.Black)
             }
             Spacer(modifier = Modifier.width(6.dp))
             IconButton(onClick = { }) {
-                Icon(Icons.Default.Share, contentDescription = "Share")
+                Icon(Icons.Default.Share, contentDescription = "Share",tint = Color.Black,)
             }
         }
     }
@@ -223,13 +224,13 @@ fun ListButton(text: String) {
         OutlinedButton(
             onClick = { },
             shape = RoundedCornerShape(6.dp),
-            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFFD9CFFF))
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))
         ) {
-            Text(text)
+            Text(text, color = Color.Black)
         }
         Spacer(modifier = Modifier.width(6.dp))
         IconButton(onClick = { }) {
-            Icon(Icons.Default.Share, contentDescription = "Share")
+            Icon(Icons.Default.Share, contentDescription = "Share",tint = Color.Black,)
         }
     }
 }

@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,20 +28,23 @@ import androidx.navigation.NavController
 
 @Composable
 fun DropDownScreen(navController: NavController){
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFEFEFEF)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Button(onClick = {
-            navController.navigate("features")
-        }){
-            Text(text = "Home")
+            navController.navigate("features")},
+            shape = RoundedCornerShape(6.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))
+        ){
+            Text(text = "Home", color = Color.Black)
 
         }
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick = {
-            navController.navigate("Location")
-        }){
-            Text(text = "Battery - 100%")
+            navController.navigate("Location") },
+            shape = RoundedCornerShape(6.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))){
+            Text(text = "Battery - 100%",color = Color.Black)
 
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -47,19 +53,26 @@ fun DropDownScreen(navController: NavController){
                 .background(Color(0xFFE6E6FA)) // light purple
                 .padding(12.dp)
         ) {
-            Text("Volume", modifier = Modifier.padding(start = 10.dp))
+            Text("Volume", modifier = Modifier.padding(start = 10.dp),color = Color.Black)
             var sliderPosition by remember { mutableStateOf(0.5f) }
             Slider(
                 value = sliderPosition,
                 onValueChange = { sliderPosition = it },
+                colors = SliderDefaults.colors(
+                    thumbColor = Color(0xFF9A7DFF), // Color of the draggable thumb
+                    activeTrackColor = Color(0xFF9A7DFF), // Color of the track to the left of the thumb
+                    inactiveTrackColor = Color.Gray, // Color of the track to the right of the thumb
+                    activeTickColor = Color.Green, // Color of the ticks to the left of the thumb (if used)
+                    inactiveTickColor = Color.LightGray)
                 //modifier = Modifier.fillMaxWidth()
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick = {
-            navController.navigate("AboutApp")
-        }){
-            Text(text = "About")
+            navController.navigate("AboutApp") },
+            shape = RoundedCornerShape(6.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))){
+            Text(text = "About",color = Color.Black)
 
         }
 }}

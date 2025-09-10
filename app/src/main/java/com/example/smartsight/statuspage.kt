@@ -1,117 +1,141 @@
 package com.example.smartsight
 
-
-
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import android.Manifest
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter // Import BluetoothAdapter directly
 import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothProfile
+// import android.bluetooth.BluetoothProfile; // Not strictly needed for the revised simpler check
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.BatteryManager
 import android.os.Build
-
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-
 import kotlinx.coroutines.delay
+import androidx.compose.ui.graphics.Color
 
-
-
-    // Launcher for BLUETOOTH_CONNECT permission request
-
-
-
-
-
-
-
-
+const val APP_TAG = "SmartSightApp"
 
 @Composable
- fun AppScreen(onProceedToNextUi: () -> Unit,navController: NavController) {
+fun AppScreen(navController: NavController) {
     val context = LocalContext.current
 
-    // UI States for different statuses
-    var btConnected by remember { mutableStateOf(isActualBluetoothDeviceConnected(context)) }
-    var netConnected by remember { mutableStateOf(isInternetConnected(context)) }
-    var batteryPct by remember { mutableIntStateOf(batteryPercent(context)) }
-    var goNext by remember { mutableStateOf(false) } // Controls navigation to NextUi
+    var btConnected by remember { mutableStateOf(false) }
+    var netConnected by remember { mutableStateOf(false) }
+    var batteryPct by remember { mutableIntStateOf(0) }
+    var conditionsMetForNavigation by remember { mutableStateOf(false) }
 
-    // Periodically poll for status updates
+    LaunchedEffect(key1 = context) {
+        Log.d(APP_TAG, "AppScreen: Initializing states.")
+        btConnected = isBluetoothReadyAndDevicePaired(context) // Using revised function
+        netConnected = isInternetConnected(context)
+        batteryPct = batteryPercent(context)
+        conditionsMetForNavigation = btConnected && netConnected
+        Log.d(APP_TAG, "AppScreen: Initial states set - BT: $btConnected, Net: $netConnected, Nav: $conditionsMetForNavigation")
+    }
+
     LaunchedEffect(Unit) {
+        Log.d(APP_TAG, "AppScreen: Polling_Loop started.")
         while (true) {
-            val currentBtStatus = isActualBluetoothDeviceConnected(context)
+            val currentBtStatus = isBluetoothReadyAndDevicePaired(context) // Using revised function
             val currentNetStatus = isInternetConnected(context)
             val currentBatteryStatus = batteryPercent(context)
 
-            // Update states if changed
-            if (btConnected != currentBtStatus) btConnected = currentBtStatus
-            if (netConnected != currentNetStatus) netConnected = currentNetStatus
-            if (batteryPct != currentBatteryStatus) batteryPct = currentBatteryStatus
-
-            // Update navigation flag
-            val shouldGoNext = currentBtStatus && currentNetStatus
-            if (goNext != shouldGoNext) {
-                goNext = shouldGoNext
-                if (shouldGoNext) onProceedToNextUi() // Callback when ready to proceed
+            if (btConnected != currentBtStatus) {
+                btConnected = currentBtStatus
+                Log.i(APP_TAG, "AppScreen: Bluetooth status changed to: $currentBtStatus")
             }
-            delay(1500) // Polling interval: 1.5 seconds
+            if (netConnected != currentNetStatus) {
+                netConnected = currentNetStatus
+                Log.i(APP_TAG, "AppScreen: Network status changed to: $currentNetStatus")
+            }
+            if (batteryPct != currentBatteryStatus) {
+                batteryPct = currentBatteryStatus
+            }
+
+            val shouldNavigateNow = currentBtStatus && currentNetStatus
+            if (conditionsMetForNavigation != shouldNavigateNow) {
+                conditionsMetForNavigation = shouldNavigateNow
+                Log.i(APP_TAG, "AppScreen: conditionsMetForNavigation changed to: $shouldNavigateNow")
+            }
+            delay(1500)
         }
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        if (goNext) {
-            NextUi() // Show next screen if conditions are met
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+        if (conditionsMetForNavigation) {
+            LaunchedEffect(Unit) {
+                Log.i(APP_TAG, "AppScreen: Nav_Conditions_Met. Attempting to navigate to 'features'.")
+                try {
+                    navController.navigate("features") {
+                        launchSingleTop = true
+                        // Optional: Clear backstack
+                        // popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    }
+                    Log.i(APP_TAG, "AppScreen: Navigation to 'features' initiated successfully.")
+                } catch (e: Exception) {
+                    Log.e(APP_TAG, "AppScreen: CRITICAL - Exception during navigation to 'features'", e)
+                }
+            }
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Loading features...")
+                }
+            }
         } else {
-            StatusUi(btConnected, netConnected, batteryPct) // Show status screen
+            StatusUi(btConnected, netConnected, batteryPct)
         }
     }
 }
 
 @Composable
-fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: Int) {
+private fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: Int) {
     Column(
-        Modifier.fillMaxSize().padding(24.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Bluetooth Status
         Image(
-            painter = painterResource(if (btConnected) R.drawable.outline_bluetooth_connected_24
-            else R.drawable.baseline_bluetooth_disabled_24),
+            painter = painterResource(
+                // Ensure these drawables match your desired icons for "connected" vs "disabled/not connected"
+                if (btConnected) R.drawable.outline_bluetooth_connected_24
+                else R.drawable.baseline_bluetooth_disabled_24
+            ),
             contentDescription = "Bluetooth Status",
             modifier = Modifier.size(84.dp)
         )
         Text(
-            text = if (btConnected) "Device Connected" else "Device Not Connected",
+            text = if (btConnected) "Bluetooth Ready" else "Bluetooth Not Ready", // Text updated
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 8.dp, bottom = 20.dp)
         )
 
-        // Internet Status
         Image(
-            painter = painterResource(if (netConnected) R.drawable.outline_android_wifi_3_bar_24 else R.drawable.outline_android_wifi_3_bar_off_24),
+            painter = painterResource(
+                if (netConnected) R.drawable.outline_android_wifi_3_bar_24
+                else R.drawable.outline_android_wifi_3_bar_off_24
+            ),
             contentDescription = "Internet Status",
             modifier = Modifier.size(84.dp)
         )
@@ -121,7 +145,6 @@ fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: Int) {
             modifier = Modifier.padding(top = 8.dp, bottom = 20.dp)
         )
 
-        // Battery Status
         Image(
             painter = painterResource(R.drawable.bt),
             contentDescription = "Battery Status",
@@ -135,54 +158,81 @@ fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: Int) {
     }
 }
 
-@Composable
- fun NextUi() {
-    // Placeholder for the screen shown after checks pass
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("All Set!", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(8.dp))
-            Text("Bluetooth & Internet are connected.")
-        }
-    }
-}
 
-/* ---------- Helper Functions ---------- */
-
-// Checks if a Bluetooth device is actively connected.
-// Requires BLUETOOTH_CONNECT permission on Android 12+.
+/**
+ * Checks if Bluetooth is enabled and if there's at least one bonded (paired) device.
+ * This is a common simplified check for "Bluetooth readiness."
+ * Requires BLUETOOTH_CONNECT permission on Android 12+ for accessing bondedDevices.
+ */
 @SuppressLint("MissingPermission")
- fun isActualBluetoothDeviceConnected(context: Context): Boolean {
-    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
-    val bluetoothAdapter = bluetoothManager?.adapter
-    if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled) return false
+fun isBluetoothReadyAndDevicePaired(context: Context): Boolean {
+    Log.d(APP_TAG, "BluetoothCheck: Starting isBluetoothReadyAndDevicePaired")
+    try {
+        // Get BluetoothAdapter directly if possible, or via BluetoothManager
+        val bluetoothAdapter: BluetoothAdapter? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+            bluetoothManager?.adapter
+        } else {
+            @Suppress("DEPRECATION")
+            BluetoothAdapter.getDefaultAdapter()
+        }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        if (bluetoothAdapter == null) {
+            Log.w(APP_TAG, "BluetoothCheck: BluetoothAdapter is null.")
             return false
         }
+
+        if (!bluetoothAdapter.isEnabled) {
+            Log.d(APP_TAG, "BluetoothCheck: Bluetooth is disabled.")
+            return false
+        }
+        Log.d(APP_TAG, "BluetoothCheck: Bluetooth is enabled.")
+
+        // Runtime permission check for Android S (API 31) and above is needed to access bondedDevices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.w(APP_TAG, "BluetoothCheck: BLUETOOTH_CONNECT permission not granted on S+. Cannot check bonded devices.")
+                // Depending on requirements, you might return true if adapter is enabled but can't check devices,
+                // or false because a full check isn't possible. For "device paired", false is safer.
+                return false
+            }
+            Log.d(APP_TAG, "BluetoothCheck: BLUETOOTH_CONNECT permission is granted on S+ for bonded devices check.")
+        }
+
+        // Check for bonded devices. This requires BLUETOOTH (pre-S) or BLUETOOTH_CONNECT (S+)
+        val bondedDevices = bluetoothAdapter.bondedDevices
+        if (bondedDevices != null && bondedDevices.isNotEmpty()) {
+            Log.i(APP_TAG, "BluetoothCheck: At least one device is bonded (paired). Count: ${bondedDevices.size}")
+            return true
+        } else {
+            Log.d(APP_TAG, "BluetoothCheck: No devices are bonded (paired).")
+            return false
+        }
+
+    } catch (e: SecurityException) {
+        // This could happen if permissions are revoked or if there's an OS-level issue
+        Log.e(APP_TAG, "BluetoothCheck: SecurityException in isBluetoothReadyAndDevicePaired", e)
+        return false
+    } catch (e: Throwable) {
+        Log.e(APP_TAG, "BluetoothCheck: Unexpected Throwable in isBluetoothReadyAndDevicePaired", e)
+        return false
     }
-    val relevantProfiles = listOf(BluetoothProfile.A2DP, BluetoothProfile.HEADSET, BluetoothProfile.GATT)
-    for (profile in relevantProfiles) {
-        try {
-            if (bluetoothManager.getConnectedDevices(profile).isNotEmpty()) return true
-        } catch (e: SecurityException) { return false }
-    }
-    return false
 }
 
-// Checks for active internet connection.
-// Requires ACCESS_NETWORK_STATE permission.
+
 @SuppressLint("MissingPermission")
- fun isInternetConnected(context: Context): Boolean {
-    val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager? ?: return false
+fun isInternetConnected(context: Context): Boolean {
+    val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        ?: return false
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val network = cm.activeNetwork ?: return false
         val capabilities = cm.getNetworkCapabilities(network) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+                capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     } else {
         @Suppress("DEPRECATION")
         val activeNetworkInfo = cm.activeNetworkInfo
@@ -191,11 +241,8 @@ fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: Int) {
     }
 }
 
-// Gets current battery percentage.
- fun batteryPercent(context: Context): Int {
-    val bm = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-    return bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY).coerceIn(0, 100)
+fun batteryPercent(context: Context): Int {
+    val bm = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager?
+    return bm?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)?.coerceIn(0, 100) ?: 0
 }
-
-
 

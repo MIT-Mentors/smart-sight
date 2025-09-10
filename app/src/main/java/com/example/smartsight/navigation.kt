@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.text.style.TextAlign
 
 // Make sure you have the Material 3 dependency in your app/build.gradle.kts (or build.gradle)
 // implementation("androidx.compose.material3:material3:1.2.1") // Or latest stable/alpha version
@@ -42,7 +43,8 @@ fun NavigationScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Navigation", fontWeight = FontWeight.Bold)
+
+                    Text("Navigation", fontWeight = FontWeight.Bold,textAlign = TextAlign.Center)
                         },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("DropDown") }) {
@@ -53,7 +55,7 @@ fun NavigationScreen(navController: NavController) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB39DDB), // Example purple color
+                    containerColor = Color(0xFF9A7DFF), // Example purple color
                     titleContentColor = Color.Black,
                     actionIconContentColor = Color.Black, // Color for action icons
                     navigationIconContentColor = Color.Black // Color for navigation icon
@@ -107,7 +109,7 @@ fun NavigationScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
-                    .background(Color(0xFFD1C4E9), RoundedCornerShape(12.dp)), // Lighter purple
+                    .background(Color(0xFF9A7DFF), RoundedCornerShape(12.dp)), // Lighter purple
                 contentAlignment = Alignment.Center
             ) {
                 Column(

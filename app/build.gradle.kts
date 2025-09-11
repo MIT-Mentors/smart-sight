@@ -65,4 +65,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Websockets
+    implementation("org.java-websocket:Java-WebSocket:1.5.3")
 }

@@ -19,7 +19,7 @@ class ESPWebSocketClient(
     private var connected = false
     private val mainHandler = Handler(Looper.getMainLooper())
     private val wsClient: WebSocketClient
-
+    //Websocket initialization
     init {
         val wsUri = URI("ws://$espIp:8888/")
         wsClient = object : WebSocketClient(wsUri) {
@@ -72,7 +72,7 @@ class ESPWebSocketClient(
     }
 
     fun isConnected(): Boolean = connected
-
+    // Send message to ESP to request an image
     fun sendMessage(message: String) {
         if (connected) {
             wsClient.send(message)

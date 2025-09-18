@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/src/androidTest
+/app/src/test
+/app/src/main/java/com/example/smartsight/ui/theme

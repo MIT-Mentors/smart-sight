@@ -2,7 +2,6 @@ package com.example.smartsight
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +27,7 @@ fun FeaturesScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFEFEF)), // Light gray background
+            .background(Color(0xFFEFEFEF)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
@@ -64,11 +63,11 @@ fun FeaturesScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // SOS Button - Center top
+        // SOS Button
         FeatureButton(
             text = "SOS",
-            icon = Icons.Default.Warning, // Emergency warning icon
-            onClick = { /* SOS logic here */ }
+            icon = Icons.Default.Warning,
+            onClick = { /* ToDo: Implement SOS logic here */ }
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -99,7 +98,7 @@ fun FeaturesScreen(navController: NavController) {
         ) {
             FeatureButton(
                 text = "Document Reading",
-                icon = Icons.Default.Description, // Document icon
+                icon = Icons.Default.Description,
                 onClick = { navController.navigate("documentReading") }
             )
             FeatureButton(
@@ -111,7 +110,7 @@ fun FeaturesScreen(navController: NavController) {
     }
 }
 
-@Composable
+@Composable // Button UI
 fun FeatureButton(
     text: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
@@ -122,8 +121,8 @@ fun FeatureButton(
         modifier = Modifier.size(120.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF9A7DFF), // Purple background
-            contentColor = Color.White          // White text
+            containerColor = Color(0xFF9A7DFF),
+            contentColor = Color.White
         )
     ) {
         Column(

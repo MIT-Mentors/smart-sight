@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,11 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
-@Composable
+@Composable // List of button to navigate to different screens
 fun DropDownScreen(navController: NavController){
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFFEFEFEF)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
+        // Home Button
         Button(onClick = {
             navController.navigate("features")},
             shape = RoundedCornerShape(6.dp),
@@ -40,17 +39,19 @@ fun DropDownScreen(navController: NavController){
 
         }
         Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick = {
-            navController.navigate("Location") },
+        //  Battery Status
+        Button(onClick = {/* ToDo: Implement SOS logic here */},
             shape = RoundedCornerShape(6.dp),
             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color(0xFF9A7DFF))){
             Text(text = "Battery - 100%",color = Color.Black)
 
         }
         Spacer(modifier = Modifier.height(20.dp))
+
+        // Slider for Volume Control
         Column(
             modifier = Modifier
-                .background(Color(0xFFE6E6FA)) // light purple
+                .background(Color(0xFFE6E6FA))
                 .padding(12.dp)
         ) {
             Text("Volume", modifier = Modifier.padding(start = 10.dp),color = Color.Black)
@@ -64,10 +65,11 @@ fun DropDownScreen(navController: NavController){
                     inactiveTrackColor = Color.Gray, // Color of the track to the right of the thumb
                     activeTickColor = Color.Green, // Color of the ticks to the left of the thumb (if used)
                     inactiveTickColor = Color.LightGray)
-                //modifier = Modifier.fillMaxWidth()
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
+
+        // About Screen
         Button(onClick = {
             navController.navigate("AboutApp") },
             shape = RoundedCornerShape(6.dp),

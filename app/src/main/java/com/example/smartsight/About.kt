@@ -60,6 +60,7 @@ fun About_Screen(navController: NavController){
                     .background(Color.Black, shape = RoundedCornerShape(4.dp))
             )
         }
+        // Body Content
         Text(
                 text = "Project Members:\n Mr. Pragash Durai\n Tarun Rajan M \n Sanjay P\n Sanjay KUmar M"
             )

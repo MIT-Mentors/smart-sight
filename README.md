@@ -56,6 +56,6 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 ## Screenshots
 | ESP Disconnected                                  | ESP Connected                                | Image Captured                                | 
 |---------------------------------------------------|---------------------------------------------|-----------------------------------------------|
-| ![ESP_Disconnected](assets/esp_disconnected.jpeg) | ![ESP_Connected](assets/esp_connected.jpeg) | ![Image_Captured](assets/image_captured.jpeg) |   
+| ![ESP_Disconnected](asserts/esp_disconnected.jpeg) | ![ESP_Connected](asserts/esp_connected.jpeg) | ![Image_Captured](asserts/image_captured.jpeg) |   
 ![FlowChart](asserts/flow_chart.jpeg)  
 For more details, please refer to the project documentation and future updates.

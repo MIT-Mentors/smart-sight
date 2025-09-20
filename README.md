@@ -15,25 +15,22 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 ---
 ## Object Detection
 ### System Architecture
-## Hardware (ESP32-S3 Sense)
+### Hardware (ESP32-S3 Sense)
 
-Acts as a WebSocket server (port 8888).  
-Captures images via onboard camera using the ESP32 camera driver.  
-On receiving a capture command, returns a JPEG image buffer.  
+- Acts as a WebSocket server (port 8888).  
+- Captures images via onboard camera using the ESP32 camera driver.  
+- On receiving a capture command, returns a JPEG image buffer.  
 
 ### Android App
-Built with Kotlin + Jetpack Compose.  
-Provides UI screens for each feature.  
-Uses ESPWebSocketClient class to communicate with ESP32.  
-Decodes received JPEG bytes into a Bitmap and renders in the Object Detection Screen.
+- Built with Kotlin + Jetpack Compose.  
+- Provides UI screens for each feature.  
+- Uses ESPWebSocketClient class to communicate with ESP32.  
+- Decodes received JPEG bytes into a Bitmap and renders in the Object Detection Screen.
 
 ## Key Files
 ### ESP32 (Arduino)
 
-main.ino  
-1) WiFi connection  
-2) WebSocket server setup  
-3) Camera initialization & image capture
+1) main.ino - WiFi connection, WebSocket server setup, Camera initialization & image capture
 
 ### Android App (Kotlin)
 
@@ -54,5 +51,8 @@ main.ino
 1) Clone this repository.  
 2) Open project in Android Studio.  
 3) Update the ESP32 IP in ESPWebSocketClient.kt.  
-4) Build & run the app on an Android device.  
+4) Build & run the app on an Android device.
+
+## Screenshots
+![ESP_Disconnected](asserts/esp_connected.jpeg)
 For more details, please refer to the project documentation and future updates.

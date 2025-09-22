@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 
 @Composable
 fun ObjectDetectionScreen(navController: NavController) {
-    // State to hold the detected objects
     var responseText by remember { mutableStateOf("Response will appear here") }
 
     Column(
@@ -28,7 +27,6 @@ fun ObjectDetectionScreen(navController: NavController) {
             .background(Color(0xFFF5F5F5)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,7 +59,7 @@ fun ObjectDetectionScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sample Image (fills half of the screen with no gaps)
+        // Sample Image
         Image(
             painter = painterResource(id = R.drawable.sample_object), // Replace with your actual image name
             contentDescription = "Object Detection Image",

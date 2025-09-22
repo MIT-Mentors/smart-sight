@@ -1,7 +1,6 @@
 package com.example.smartsight
 
 import android.Manifest
-import android.R
 import android.content.ContentResolver
 import android.provider.ContactsContract
 import androidx.compose.foundation.background
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 // Helper function to fetch contacts
@@ -153,7 +151,7 @@ fun Location_Display(navController: NavController) {
         }
     }
 
-    // --- Create List Dialog ---
+    // Create List Dialog
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -188,7 +186,7 @@ fun Location_Display(navController: NavController) {
         )
     }
 
-    // --- Contacts Dialog ---
+    // Contacts Dialog
     if (showContactsDialog) {
         AlertDialog(
             onDismissRequest = { showContactsDialog = false },

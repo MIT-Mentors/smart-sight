@@ -62,7 +62,7 @@ fun DocumentReadingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Sample Image (fits half of the screen width)
+            // Sample Image
             Image(
                 painter = painterResource(id = R.drawable.sample_doc), // Add your image in drawable
                 contentDescription = "Sample Document",

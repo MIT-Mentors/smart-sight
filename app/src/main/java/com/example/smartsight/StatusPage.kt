@@ -2,9 +2,8 @@ package com.example.smartsight
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter // Import BluetoothAdapter directly
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
-// import android.bluetooth.BluetoothProfile; // Not strictly needed for the revised simpler check
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -86,8 +85,6 @@ fun AppScreen(navController: NavController) {
                 try {
                     navController.navigate("features") {
                         launchSingleTop = true
-                        // Optional: Clear backstack
-                        // popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                     Log.i(APP_TAG, "AppScreen: Navigation to 'features' initiated successfully.")
                 } catch (e: Exception) {
@@ -164,7 +161,6 @@ private fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: In
  * This is a common simplified check for "Bluetooth readiness."
  * Requires BLUETOOTH_CONNECT permission on Android 12+ for accessing bondedDevices.
  */
-@SuppressLint("MissingPermission")
 fun isBluetoothReadyAndDevicePaired(context: Context): Boolean {
     Log.d(APP_TAG, "BluetoothCheck: Starting isBluetoothReadyAndDevicePaired")
     try {
@@ -222,8 +218,7 @@ fun isBluetoothReadyAndDevicePaired(context: Context): Boolean {
     }
 }
 
-
-@SuppressLint("MissingPermission")
+// Internet connection
 fun isInternetConnected(context: Context): Boolean {
     val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         ?: return false
@@ -240,9 +235,8 @@ fun isInternetConnected(context: Context): Boolean {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }
-
+// Phone's battery percentage
 fun batteryPercent(context: Context): Int {
     val bm = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager?
     return bm?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)?.coerceIn(0, 100) ?: 0
 }
-

@@ -1,7 +1,5 @@
 package com.example.smartsight
 
-
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
@@ -10,21 +8,16 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.smartsight.ui.theme.SmartSightTheme // Assuming you have a theme
+import com.example.smartsight.ui.theme.SmartSightTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -48,12 +41,12 @@ class MainActivity : ComponentActivity() {
         requestBluetoothPermissionIfNeeded()
 
         setContent {
-            SmartSightTheme { // Apply your app's theme
+            SmartSightTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "status_screen") {
                         composable("status_screen") {
-                            // Call the AppScreen from statuspage.kt
+                            // Call the AppScreen from StatusPage.kt
                             AppScreen(navController = navController)
                         }
                         composable("features") {
@@ -96,26 +89,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-// Example FeaturesScreen (should be in its own file or this file)
-
-
-/*  @Composable
-fun SmartSightApp() {
-  val navController = rememberNavController()
-
-  NavHost(navController = navController, startDestination = "features")
-  {
-      composable("statuspage") { MaterialTheme { AppScreen( navController)} }
-      composable("features") { FeaturesScreen(navController) }
-      composable("documentReading") { DocumentReadingScreen(navController) }
-      composable("objectDetection") { ObjectDetectionScreen(navController) }
-      composable(route = "Location"){ Location_Display(navController)}
-      composable(route = "DropDown"){ DropDownScreen(navController)}
-      composable(route = "AboutApp"){ About_Screen(navController)}
-      composable("navigation") { NavigationScreen(navController) }
-  }
-}
-*/
 
 

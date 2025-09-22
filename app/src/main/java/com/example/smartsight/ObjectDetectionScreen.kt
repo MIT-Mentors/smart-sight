@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.*
 
 @Composable
-fun ObjectDetectionScreen(navController: NavController, espIp: String = "172.16.54.82") {
+fun ObjectDetectionScreen(navController: NavController, espIp: String = "10.186.240.82") {
 
     val responseText = remember { mutableStateOf("Response will appear here") }
     val imageBitmap = remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }

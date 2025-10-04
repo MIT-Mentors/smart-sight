@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
             SmartSightTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "status_screen") {
+                    NavHost(navController = navController, startDestination = "Location") {
                         composable("status_screen") {
                             // Call the AppScreen from StatusPage.kt
                             AppScreen(navController = navController)

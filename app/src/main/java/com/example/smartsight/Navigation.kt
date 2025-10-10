@@ -107,7 +107,7 @@ fun NavigationScreen(navController: NavController) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
-                ) {
+                ) { /* ToDo: Create a global variable for distance*/
                     Text("Distance - 50KM", fontSize = 18.sp, fontWeight = FontWeight.Medium)
                     Spacer(modifier = Modifier.height(12.dp))
                     Icon(
@@ -116,6 +116,7 @@ fun NavigationScreen(navController: NavController) {
                         modifier = Modifier.size(48.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
+                    /* ToDo: Create a global variable for distance*/
                     Text("Right turn in 100M", fontSize = 16.sp)
                 }
             }

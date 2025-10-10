@@ -40,7 +40,6 @@ import com.google.gson.reflect.TypeToken
 @Composable
 fun FeaturesScreen(navController: NavController) {
     val context = LocalContext.current
-    // Set up location client and permissions, just like in the other screen
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
@@ -52,7 +51,6 @@ fun FeaturesScreen(navController: NavController) {
         )
     )
 
-    // Define the SOS action logic
     @SuppressLint("MissingPermission")
     val sosAction = {
         // First, check if all necessary permissions have been granted

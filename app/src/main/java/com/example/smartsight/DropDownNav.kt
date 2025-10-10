@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
-@Composable // List of button to navigate to different screens
+@Composable // List of buttons to navigate to different screens
 fun DropDownScreen(navController: NavController){
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFFEFEFEF)),
         horizontalAlignment = Alignment.CenterHorizontally,

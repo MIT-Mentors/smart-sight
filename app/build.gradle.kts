@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.smartsight"
-    compileSdk = 36 // Keep stable version instead of 36 for now
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.smartsight"

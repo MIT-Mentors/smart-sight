@@ -1,5 +1,6 @@
 package com.example.smartsight
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,11 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun DocumentReadingScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()
@@ -62,14 +66,9 @@ fun DocumentReadingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Sample Image
-            Image(
-                painter = painterResource(id = R.drawable.sample_doc), // Add your image in drawable
-                contentDescription = "Sample Document",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(horizontal = 0.dp)
+            // Sample Text
+            Text(
+                text = stringResource(id = R.string.speechScripts)
             )
 
             Spacer(modifier = Modifier.height(16.dp))

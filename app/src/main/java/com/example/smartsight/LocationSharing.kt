@@ -65,7 +65,6 @@ fun parseNumber(contact: String): String {
 }
 
 // This function sends SMS directly using a specific SIM card (subscriptionId)
-@SuppressLint("MissingPermission") // Permissions are checked before this is called
 fun sendSMS(context: Context, number: String, message: String, subscriptionId: Int) {
     if (number.isBlank()) return
     try {
@@ -95,7 +94,6 @@ fun fetchLocation(
             if (location != null) {
                 val lat = location.latitude
                 val lon = location.longitude
-                // FINAL, FINAL CORRECTION: The $ goes BEFORE the variable for string interpolation.
                 val gmapLink = "https://maps.google.com/?q=${lat},${lon}"
                 onLocationFetched(gmapLink)
             } else {

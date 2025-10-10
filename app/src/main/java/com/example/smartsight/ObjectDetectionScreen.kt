@@ -12,13 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.*
 
 @Composable
-fun ObjectDetectionScreen(navController: NavController, espIp: String = "10.186.240.82") {
+fun ObjectDetectionScreen(navController: NavController, espIp: String = stringResource(id = R.string.ESP_IP)) {
 
     val responseText = remember { mutableStateOf("Response will appear here") }
     val imageBitmap = remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }

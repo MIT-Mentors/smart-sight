@@ -41,7 +41,7 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 ## Installation & Setup
 ### ESP32 Setup
 
-1) Install Arduino IDE with ESP32S3 Sense board support.  ( refer this video for how to install Anduino ODE with ESP32S3 board support-https://www.youtube.com/watch?v=JlnV3U3Rx7k)
+1) Install Arduino IDE with ESP32S3 Sense board support.  ( Refer this video - https://www.youtube.com/watch?v=JlnV3U3Rx7k)
 2) Flash main.ino to ESP32-S3 Sense.  
 3) Update WiFi SSID & password inside the sketch. 
 4) After boot, note the printed IP address in Serial Monitor.

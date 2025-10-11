@@ -87,7 +87,7 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 ## Key Files
 
 ### ESP32 (Arduino)
-1. `main.ino` – WiFi connection, WebSocket server setup, Camera initialization & image capture  
+1.[main.ino](Arduino_code/main.ino) – WiFi connection, WebSocket server setup, Camera initialization & image capture
 
 ### Android App (Kotlin)
 1. `MainActivity.kt` – App entry & navigation  

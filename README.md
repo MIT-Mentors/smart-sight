@@ -113,13 +113,10 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 
 ---
 
-## Screenshots
-
-| ESP Disconnected | ESP Connected | Image Captured |
-|------------------|---------------|----------------|
-| ![ESP_Disconnected](asserts/esp_disconnected.jpeg) | ![ESP_Connected](asserts/esp_connected.jpeg) | ![Image_Captured](asserts/image_captured.jpeg) |
+## Object Detection Demo Video
+![Demo Video](Assets/Documents/ObjectDetection.gif)
 
 ---
 
 ### Flow Chart
-![FlowChart](asserts/flow_chart.jpeg)
+![FlowChart](Assets/Documents/flowchart.png)

@@ -56,6 +56,14 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 - The board communicates with the Android app over **Wi-Fi** using a **WebSocket server**.
 
 ---
+### ESP32-S3 Main Specifications
+- **Processor:** Dual-core Xtensa LX7 @ 240 MHz  
+- **Memory:** 8 MB PSRAM  
+- **Storage:** 4 MB Flash  
+- **Connectivity:** Wi-Fi 802.11 b/g/n, Bluetooth 5.0 (BLE)  
+- **Camera:** Integrated OV2640 module  
+- **Power Supply:** 3.3V (via USB Type-C or Li-ion battery)  
+---
 
 ## Object Detection
 
@@ -71,16 +79,6 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 - Contains the Object Detection screen responsible for image acquisition  
 - Uses the `ESPWebSocketClient` class for real-time communication with the ESP32  
 - Decodes incoming JPEG bytes into a `Bitmap` and renders the image on screen  
-
----
-
-### ESP32-S3 Main Specifications
-- **Processor:** Dual-core Xtensa LX7 @ 240 MHz  
-- **Memory:** 8 MB PSRAM  
-- **Storage:** 4 MB Flash  
-- **Connectivity:** Wi-Fi 802.11 b/g/n, Bluetooth 5.0 (BLE)  
-- **Camera:** Integrated OV2640 module  
-- **Power Supply:** 3.3V (via USB Type-C or Li-ion battery)  
 
 ---
 

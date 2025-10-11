@@ -88,9 +88,9 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 1.[main.ino](Arduino_code/main.ino) – WiFi connection, WebSocket server setup, Camera initialization & image capture
 
 ### Android App (Kotlin)
-1. `MainActivity.kt` – App entry & navigation  
-2. `ObjectDetectionScreen.kt` – UI for capture + preview  
-3. `SendPhoto.kt` – WebSocket handling  
+1. [MainActivity.kt](app/src/main/java/com/example/smartsight/MainActivity.kt) – App entry & navigation  
+2. [ObjectDetectionScreen.kt](app/src/main/java/com/example/smartsight/ObjectDetectionScreen.kt)– UI for capture + preview  
+3. [SendPhoto.kt](app/src/main/java/com/example/smartsight/SendPhoto.kt) – WebSocket handling  
 
 ---
 
@@ -99,14 +99,14 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 ### ESP32 Setup
 1. Install Arduino IDE with ESP32S3 Sense board support.  
    (For a detailed walkthrough, refer to this video: [https://www.youtube.com/watch?v=JlnV3U3Rx7k](https://www.youtube.com/watch?v=JlnV3U3Rx7k))  
-2. Flash `main.ino` to ESP32-S3 Sense.  
+2. Flash [main.ino](Arduino_code/main.ino) to ESP32-S3 Sense.  
 3. Update WiFi SSID & password inside the sketch.  
 4. After boot, note the printed IP address in Serial Monitor.  
 
 ### Android App Setup
 1. Clone this repository.  
 2. Open project in Android Studio.  
-3. Update the ESP32 IP in `ESPWebSocketClient.kt`.  
+3. Update the ESP32 IP in [ESPWebSocketClient.kt](app/src/main/java/com/example/smartsight/ESPWebSocketClient.kt).  
 4. Build & run the app on an Android device.  
 
 ---

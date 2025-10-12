@@ -62,8 +62,8 @@ fun About_Screen(navController: NavController){
         }
         // Body Content
         Text(
-            text = "Project Members:\n Mr. Pragash Durai\n Tarun Rajan M \n Sanjay P\n Sanjay KUmar M"
-        )
+                text = "Project Members:\n Pragash Durai\n Tarun Rajan M \n Sanjay P\n Sanjay KUmar M"
+            )
 
     }
 }

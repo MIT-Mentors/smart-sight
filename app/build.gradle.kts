@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.smartsight"
-    compileSdk = 36 // Keep stable version instead of 36 for now
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.smartsight"
@@ -65,5 +65,16 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Websockets
     implementation("org.java-websocket:Java-WebSocket:1.5.3")
+
+    //database
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // In your build.gradle.kts file, inside the dependencies { ... } block
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
+// We'll also use the Accompanist library for cleaner permission handling in Compose
+    implementation("com.google.accompanist:accompanist-permissions:0.31.5-beta") // Use a recent version
 }

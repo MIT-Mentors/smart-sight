@@ -1,9 +1,9 @@
 package com.example.smartsight
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -12,14 +12,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.*
 
 @Composable
-fun ObjectDetectionScreen(navController: NavController) {
-    var responseText by remember { mutableStateOf("Response will appear here") }
+fun ObjectDetectionScreen(navController: NavController, espIp: String = stringResource(id = R.string.ESP_IP)) {
+
+    val responseText = remember { mutableStateOf("Response will appear here") }
+    val imageBitmap = remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
+
+    // Start WebSocket client
+    val wsClient = remember { ESPWebSocketClient(espIp, responseText, imageBitmap) }
 
     Column(
         modifier = Modifier
@@ -27,6 +33,8 @@ fun ObjectDetectionScreen(navController: NavController) {
             .background(Color(0xFFF5F5F5)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        // Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -39,17 +47,9 @@ fun ObjectDetectionScreen(navController: NavController) {
                 imageVector = Icons.Default.Menu,
                 contentDescription = "Menu",
                 tint = Color.Black,
-                modifier = Modifier.clickable {
-                    navController.navigate("DropDown")
-                }
+                modifier = Modifier.clickable { navController.navigate("DropDown") }
             )
-
-            Text(
-                text = "Object Detection",
-                fontSize = 20.sp,
-                color = Color.Black
-            )
-
+            Text(text = "Object Detection", fontSize = 20.sp, color = Color.Black)
             Box(
                 modifier = Modifier
                     .size(28.dp)
@@ -59,26 +59,45 @@ fun ObjectDetectionScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sample Image
-        Image(
-            painter = painterResource(id = R.drawable.sample_object), // Replace with your actual image name
-            contentDescription = "Object Detection Image",
+        // Image preview
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(250.dp)
-                .padding(horizontal = 0.dp) // Removes extra gaps
-        )
+                .background(Color.LightGray),
+            contentAlignment = Alignment.Center
+        ) {
+            if (imageBitmap.value != null) {
+                Image(bitmap = imageBitmap.value!!, contentDescription = "Object Detection Image")
+            } else {
+                Text("No image yet", color = Color.DarkGray)
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Detect Button
         Button(
             onClick = {
-                // Example detected objects response
-                responseText = "Detected Objects: Car, Traffic Sign, Tree, Road"
+                // Safe send: waits for WebSocket connection
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) { responseText.value = "Waiting for connection..." }
+                    // Wait until WebSocket is connected
+                    while (!wsClient.isConnected()) {
+                        delay(100)
+                    }
+                    try {
+                        wsClient.sendMessage("capture")
+                        withContext(Dispatchers.Main) { responseText.value = "Requesting image..." }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            responseText.value = "Error sending capture: ${e.message}"
+                        }
+                    }
+                }
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF9A7DFF), // Purple button
+                containerColor = Color(0xFF9A7DFF),
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -91,20 +110,16 @@ fun ObjectDetectionScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Response Box
+        // Response text
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
-                .height(200.dp)
+                .height(100.dp)
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = responseText,
-                color = Color.DarkGray,
-                fontSize = 16.sp
-            )
+            Text(text = responseText.value, color = Color.DarkGray, fontSize = 16.sp)
         }
     }
 }

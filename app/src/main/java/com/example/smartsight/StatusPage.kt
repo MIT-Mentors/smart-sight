@@ -143,7 +143,7 @@ private fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: In
         )
 
         Image(
-            painter = painterResource(R.drawable.bt),
+            painter = painterResource(R.drawable.battery),
             contentDescription = "Battery Status",
             modifier = Modifier.size(84.dp)
         )

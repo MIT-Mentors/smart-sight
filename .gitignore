@@ -1,3 +1,5 @@
+# IDE-specific settings and configurations generated locally.
+# These files are unique to each user's machine and should not be shared
 *.iml
 .gradle
 /local.properties
@@ -7,11 +9,24 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+local.properties
+
+# macOS specific file that stores custom attributes of its containing folder.
 .DS_Store
+
+# The output directory for all compiled code, APKs, and build artifacts.
+# This is always regenerated when you build the project.
 /build
+
+
+# Output directory for screenshots and screen recordings taken from the emulator.
 /captures
+
+# Build artifacts for native C/C++ code.
 .externalNativeBuild
 .cxx
-local.properties
+
+# Local Instrument Test
 /app/src/androidTest
+# Local Unit Test
 /app/src/test

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.*
 
+
 @Composable
 fun ObjectDetectionScreen(navController: NavController, espIp: String = stringResource(id = R.string.ESP_IP)) {
 

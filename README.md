@@ -18,6 +18,7 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 
 ---
 
+
 ## Hardware List
 - Seeed Studio XIAO ESP32-S3 Sense  
 - 3.7V Li-Po rechargeable battery  
@@ -65,6 +66,62 @@ As of now, no external wiring is required between the ESP32 and the camera modul
 - **Power Supply:** 3.3V (via USB Type-C or Li-ion battery)  
 ---
 
+## Status Page
+
+The Status Page is the entry point of the Smart Sight app.  
+It checks device readiness (Bluetooth, Internet, Battery) before allowing the user to access the main features, ensuring reliability and a smooth user experience.  
+
+---
+
+### System Architecture
+
+**Hardware (Android Device)**  
+- Provides Bluetooth, WiFi, and battery data to the Smart Sight app.  
+- Supplies real-time updates on system conditions required for navigation.  
+
+**Android App (Status Page)**  
+- Built with Kotlin + Jetpack Compose.  
+- Continuously monitors Bluetooth, Internet, and Battery.  
+- Displays current status with icons and percentage values.  
+- Automatically navigates to the Features screen once conditions are satisfied.  
+
+---
+
+### Key Files
+
+**Android App (Kotlin)**  
+- `AppScreen.kt` – Implements the Status Page.  
+  - Initializes system checks (Bluetooth, Internet, Battery).  
+  - Runs a polling loop to continuously update states.  
+  - Handles auto-navigation to the Features screen.  
+- `isBluetoothReadyAndDevicePaired()` – Checks if Bluetooth is enabled and a paired device exists.  
+- `isInternetConnected()` – Validates network connectivity.  
+- `batteryPercent()` – Retrieves the phone’s battery percentage.  
+
+---
+
+### Workflow
+
+1. **App Launch**  
+   - Status Page loads and initializes system checks.  
+
+2. **Condition Monitoring**  
+   - Checks Bluetooth readiness.  
+   - Validates Internet connectivity.  
+   - Reads current battery percentage.  
+   - Polling loop re-checks every 1.5 seconds.  
+
+3. **Navigation Logic**  
+   - If Bluetooth and Internet are ready → auto-navigate to Features screen.  
+   - Otherwise → stay on Status Page and display status indicators.  
+
+---
+## Screenshots
+| Before Connection                                  |   After Connection                             |
+|----------------------------------------------------|------------------------------------------------|
+|![berfore connection](asset/before_connection.jpeg)|![after connection](asset/after_connection.JPEG)|
+
+---
 ## Object Detection
 
 ### System Architecture

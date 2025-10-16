@@ -119,7 +119,7 @@ It checks device readiness (Bluetooth, Internet, Battery) before allowing the us
 ## Screenshots
 | Before Connection                                  |   After Connection                             |
 |----------------------------------------------------|------------------------------------------------|
-|![berfore connection](asset/before_connection.jpeg)|![after connection](asset/after_connection.JPEG)|
+|![berfore connection](Assets/Documents/before_connection.jpeg)|![after connection](Assets/Documents/after_connection.jpeg)|
 
 ---
 ## Object Detection

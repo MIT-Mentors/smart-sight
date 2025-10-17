@@ -41,7 +41,8 @@ android {
 
 dependencies {
     // Core Android dependencies
-    implementation(libs.androidx.core.ktx)
+
+    implementation("androidx.core:core-ktx:1.13.1") // Update to this version or newer
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 

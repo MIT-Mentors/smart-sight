@@ -119,6 +119,7 @@ fun Location_Display(navController: NavController) {
     var viewedList by remember { mutableStateOf<ContactList?>(null) }
     val currentList = viewedList
     var isCreatingList by remember { mutableStateOf(false) }
+    var isQuickSendMode by remember { mutableStateOf(false) }
 
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     val permissionsState = rememberMultiplePermissionsState(
@@ -130,7 +131,6 @@ fun Location_Display(navController: NavController) {
             Manifest.permission.READ_PHONE_STATE
         )
     )
-
     // Action to share location via SMS to a specific list of contacts
     @SuppressLint("MissingPermission")
     val shareAction: (ContactList) -> Unit = { contactList ->
@@ -217,6 +217,7 @@ fun Location_Display(navController: NavController) {
                 onClick = {
                     if (permissionsState.permissions.first { it.permission == Manifest.permission.READ_CONTACTS }.status.isGranted) {
                         contacts = fetchContacts(context.contentResolver)
+                        isQuickSendMode = true
                         showContactsDialog = true
                     } else {
                         permissionsState.launchMultiplePermissionRequest()
@@ -228,18 +229,11 @@ fun Location_Display(navController: NavController) {
             ) {
                 Text("Select a Contact", color = Color.Black)
             }
-            Spacer(modifier = Modifier.width(6.dp))
-            IconButton(onClick = {
-                lists.firstOrNull()?.let { priorityList ->
-                    shareAction(priorityList)
-                } ?: Toast.makeText(context, "No lists available to share with.", Toast.LENGTH_SHORT).show()
-            }) {
-                Icon(Icons.Default.Share, contentDescription = "Share with Priority List", tint = Color.Black)
-            }
         }
     }
 
-    // --- DIALOGS ---
+    // --- Dialogs ---
+
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -262,12 +256,14 @@ fun Location_Display(navController: NavController) {
                         selectedContacts.clear()
                     }
                     showDialog = false
+                    isCreatingList = false
                 }) { Text("OK") }
             },
             dismissButton = {
                 TextButton(onClick = {
                     newListName = ""
                     showDialog = false
+                    isCreatingList = false
                 }) { Text("Cancel") }
             }
         )
@@ -330,32 +326,46 @@ fun Location_Display(navController: NavController) {
         )
     }
 
+    // --- Contacts Dialog with Search ---
     if (showContactsDialog) {
+        var searchQuery by remember { mutableStateOf("") }
+        val filteredContacts = contacts.filter { it.contains(searchQuery, ignoreCase = true) }
+
         AlertDialog(
             onDismissRequest = { showContactsDialog = false },
             title = { Text("Select a Contact") },
             text = {
-                LazyColumn(modifier = Modifier.height(300.dp).fillMaxWidth()) {
-                    items(contacts) { contact ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    if (selectedContacts.contains(contact)) selectedContacts.remove(contact)
-                                    else selectedContacts.add(contact)
-                                }
-                                .padding(8.dp)
-                        ) {
-                            Checkbox(
-                                checked = selectedContacts.contains(contact),
-                                onCheckedChange = { isChecked ->
-                                    if (isChecked) selectedContacts.add(contact)
-                                    else selectedContacts.remove(contact)
-                                }
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = contact)
+                Column {
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        label = { Text("Search contacts") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                    )
+                    LazyColumn(modifier = Modifier.height(300.dp).fillMaxWidth()) {
+                        items(filteredContacts) { contact ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        if (selectedContacts.contains(contact)) selectedContacts.remove(contact)
+                                        else selectedContacts.add(contact)
+                                    }
+                                    .padding(8.dp)
+                            ) {
+                                Checkbox(
+                                    checked = selectedContacts.contains(contact),
+                                    onCheckedChange = { isChecked ->
+                                        if (isChecked) selectedContacts.add(contact)
+                                        else selectedContacts.remove(contact)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = contact)
+                            }
                         }
                     }
                 }
@@ -365,6 +375,28 @@ fun Location_Display(navController: NavController) {
                     if (isCreatingList) {
                         showContactsDialog = false
                         showDialog = true
+                    } else if (isQuickSendMode) {
+                        if (permissionsState.allPermissionsGranted) {
+                            showContactsDialog = false
+                            val subscriptionId = SubscriptionManager.getDefaultSmsSubscriptionId()
+                            if (subscriptionId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                                Toast.makeText(context, "Sending location to selected contacts...", Toast.LENGTH_SHORT).show()
+                                fetchLocation(context, fusedLocationClient) { locationUrl ->
+                                    val message = "My location: $locationUrl"
+                                    selectedContacts.forEach { contactString ->
+                                        val number = parseNumber(contactString)
+                                        sendSMS(context, number, message, subscriptionId)
+                                    }
+                                    selectedContacts.clear()
+                                    isQuickSendMode = false
+                                }
+                            } else {
+                                Toast.makeText(context, "No default SIM for SMS found.", Toast.LENGTH_LONG).show()
+                                isQuickSendMode = false
+                            }
+                        } else {
+                            permissionsState.launchMultiplePermissionRequest()
+                        }
                     } else {
                         val listToUpdate = lists.find { it.name == viewedList?.name }
                         listToUpdate?.contacts?.addAll(selectedContacts)
@@ -373,7 +405,9 @@ fun Location_Display(navController: NavController) {
                         showContactsDialog = false
                         viewedList = listToUpdate?.copy()
                     }
-                }) { Text("Confirm") }
+                }) {
+                    Text("Confirm")
+                }
             }
         )
     }

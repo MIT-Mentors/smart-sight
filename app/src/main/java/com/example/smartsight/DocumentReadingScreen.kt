@@ -23,17 +23,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import java.util.*
 
-// *** THIS IS THE FIX ***
-// Use a lateinit var to solve the "variable used before initialization" problem.
+
 private fun initializeTextToSpeech(
     context: Context,
     onInitialized: (TextToSpeech) -> Unit
 ) {
-    lateinit var textToSpeech: TextToSpeech // 1. Declare as lateinit
+    lateinit var textToSpeech: TextToSpeech //
 
-    textToSpeech = TextToSpeech(context) { status -> // 2. Assign to it
+    textToSpeech = TextToSpeech(context) { status ->
         if (status == TextToSpeech.SUCCESS) {
-            // 3. Now you can safely USE it inside the callback
+
             val result = textToSpeech.setLanguage(Locale.getDefault())
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "The specified language is not supported!")
@@ -49,16 +48,16 @@ private fun initializeTextToSpeech(
 fun DocumentReadingScreen(navController: NavController) {
     val context = LocalContext.current
     val scriptToRead = stringResource(id = R.string.speechScripts)
-    var tts: TextToSpeech? by remember { mutableStateOf(null) }
+    var textToSpeech: TextToSpeech? by remember { mutableStateOf(null) }
 
     DisposableEffect(Unit) {
         initializeTextToSpeech(context) { textToSpeechInstance ->
-            tts = textToSpeechInstance
+            textToSpeech  = textToSpeechInstance
         }
 
         onDispose {
-            tts?.stop()
-            tts?.shutdown()
+            textToSpeech?.stop()
+            textToSpeech?.shutdown()
         }
     }
 
@@ -68,7 +67,7 @@ fun DocumentReadingScreen(navController: NavController) {
             .background(Color(0xFFF5F5F5)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header (Unchanged)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -91,7 +90,7 @@ fun DocumentReadingScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Display the text in a scrollable Box (Unchanged)
+        // Display the text in a scrollable Box
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,10 +109,10 @@ fun DocumentReadingScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // "Read Aloud" button (Unchanged)
+        // "Read Aloud" button
         Button(
             onClick = {
-                tts?.speak(scriptToRead, TextToSpeech.QUEUE_FLUSH, null, "")
+                textToSpeech?.speak(scriptToRead, TextToSpeech.QUEUE_FLUSH, null, "")
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF9A7DFF),

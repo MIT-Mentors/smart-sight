@@ -1,7 +1,6 @@
 package com.example.smartsight
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
@@ -169,7 +168,7 @@ fun isBluetoothReadyAndDevicePaired(context: Context): Boolean {
             val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
             bluetoothManager?.adapter
         } else {
-            @Suppress("DEPRECATION")
+
             BluetoothAdapter.getDefaultAdapter()
         }
 
@@ -229,9 +228,9 @@ fun isInternetConnected(context: Context): Boolean {
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
                 capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     } else {
-        @Suppress("DEPRECATION")
+
         val activeNetworkInfo = cm.activeNetworkInfo
-        @Suppress("DEPRECATION")
+
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }

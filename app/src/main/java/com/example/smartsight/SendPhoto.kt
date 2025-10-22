@@ -1,5 +1,6 @@
 package com.example.smartsight
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
@@ -14,12 +15,15 @@ import java.nio.ByteBuffer
 class ESPWebSocketClient(
     espIp: String,
     private val responseText: MutableState<String>,
-    private val imageBitmap: MutableState<androidx.compose.ui.graphics.ImageBitmap?>
+    private val imageBitmap: MutableState<androidx.compose.ui.graphics.ImageBitmap?>,
+    // 💡 Callback function to trigger ML Kit processing
+    private val onBitmapReady: (Bitmap, MutableState<String>) -> Unit
 ) {
     private var connected = false
     private val mainHandler = Handler(Looper.getMainLooper())
     private val wsClient: WebSocketClient
-    //Websocket initialization
+
+    // Websocket initialization
     init {
         val wsUri = URI("ws://$espIp:8888/")
         wsClient = object : WebSocketClient(wsUri) {
@@ -55,8 +59,11 @@ class ESPWebSocketClient(
                     if (bmp != null) {
                         Log.i("ESPWebSocketClient", "Received image (${byteArray.size} bytes)")
                         updateUi {
+                            // 1. Display the image
                             imageBitmap.value = bmp.asImageBitmap()
-                            responseText.value = "Image received!"
+                            // 2. Update status and call the object detection logic
+                            responseText.value = "Image received. Analyzing objects..."
+                            onBitmapReady(bmp, responseText) // <--- Call to ML Kit detection
                         }
                     } else {
                         Log.w("ESPWebSocketClient", "Failed to decode image (${byteArray.size} bytes)")

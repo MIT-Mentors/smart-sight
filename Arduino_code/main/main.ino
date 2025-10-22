@@ -3,8 +3,8 @@
 #include "esp_camera.h"
 
 // Replace with your WiFi credentials
-const char* ssid = "*******";
-const char* password = "*******";
+const char* ssid = "Gayathri 5G";
+const char* password = "selva@001";
 
 // WebSocket server
 WebSocketsServer webSocket = WebSocketsServer(8888);

@@ -1,5 +1,6 @@
 package com.example.smartsight
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,16 +18,66 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.*
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
+
+// Function to run ML Kit Image Labeling on the received Bitmap
+fun runObjectLabeling(bitmap: Bitmap, responseText: MutableState<String>, context: Context) {
+    // 1. Prepare InputImage for ML Kit
+    val image = InputImage.fromBitmap(bitmap, 0)
+
+    // 2. Set options: Using a higher confidence threshold (0.7f or 70%) to improve accuracy/relevance
+    val options = ImageLabelerOptions.Builder()
+        .setConfidenceThreshold(0.7f) // <--- IMPROVED ACCURACY: Only accept labels 70% sure or higher
+        .build()
+
+    val labeler = ImageLabeling.getClient(options)
+
+    // 3. Process the image
+    labeler.process(image)
+        .addOnSuccessListener { resultLabels ->
+            val result = if (resultLabels.isEmpty()) {
+                "No highly confident objects/labels detected (confidence < 70%)."
+            } else {
+                "Detected Objects:\n" + resultLabels.joinToString("\n") {
+                    "${it.text} (${(it.confidence * 100).toInt()}%)"
+                }
+            }
+            // Update the response text with the detection results
+            responseText.value = result
+        }
+        .addOnFailureListener { e ->
+            responseText.value = "Detection failed: ${e.message}"
+        }
+}
 
 
 @Composable
 fun ObjectDetectionScreen(navController: NavController, espIp: String = stringResource(id = R.string.ESP_IP)) {
 
     val responseText = remember { mutableStateOf("Response will appear here") }
-    val imageBitmap = remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
+    val imageBitmap = remember { mutableStateOf<ImageBitmap?>(null) }
 
-    // Start WebSocket client
-    val wsClient = remember { ESPWebSocketClient(espIp, responseText, imageBitmap) }
+    // Get the context for ML Kit
+    val context = LocalContext.current
+
+    // Start WebSocket client, passing the ML Kit detection function as a callback
+    val wsClient = remember {
+        ESPWebSocketClient(
+            espIp,
+            responseText,
+            imageBitmap,
+            // Callback to run detection when a Bitmap is ready
+            onBitmapReady = { bmp, response ->
+                runObjectLabeling(bmp, response, context)
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -35,7 +86,7 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // Header
+        // Header (Unchanged)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -60,7 +111,7 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Image preview
+        // Image preview (Fills the Box and scales)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,7 +120,13 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
             contentAlignment = Alignment.Center
         ) {
             if (imageBitmap.value != null) {
-                Image(bitmap = imageBitmap.value!!, contentDescription = "Object Detection Image")
+                // Image will fill the Box but maintain aspect ratio (ContentScale.Fit)
+                Image(
+                    bitmap = imageBitmap.value!!,
+                    contentDescription = "Object Detection Image",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
             } else {
                 Text("No image yet", color = Color.DarkGray)
             }
@@ -77,7 +134,7 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Detect Button
+        // Detect Button (Unchanged)
         Button(
             onClick = {
                 // Safe send: waits for WebSocket connection
@@ -111,7 +168,7 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Response text
+        // Response text (Unchanged)
         Box(
             modifier = Modifier
                 .fillMaxWidth()

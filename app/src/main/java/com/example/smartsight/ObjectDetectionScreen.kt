@@ -12,21 +12,40 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import kotlinx.coroutines.*
+import android.Manifest
+import androidx.compose.runtime.LaunchedEffect
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
-
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ObjectDetectionScreen(navController: NavController, espIp: String = stringResource(id = R.string.ESP_IP)) {
+fun ObjectDetectionScreen(
+    navController: NavController,
+    viewModel: SharedViewModel = viewModel()
+){
 
-    val responseText = remember { mutableStateOf("Response will appear here") }
-    val imageBitmap = remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
-
-    // Start WebSocket client
-    val wsClient = remember { ESPWebSocketClient(espIp, responseText, imageBitmap) }
+    // collect the state from the ViewModel.
+    val responseText by viewModel.responseText.collectAsState()
+    val imageBitmap by viewModel.imageBitmap.collectAsState()
+    val sosPermissionsState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.READ_PHONE_STATE
+        )
+    )
+    LaunchedEffect(Unit) {
+        viewModel.sosPermissionRequest.collect { permissionsToRequest ->
+            // When the ViewModel sends an event, launch the permission dialog
+            sosPermissionsState.launchMultiplePermissionRequest()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -68,8 +87,9 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {
-            if (imageBitmap.value != null) {
-                Image(bitmap = imageBitmap.value!!, contentDescription = "Object Detection Image")
+            // Use the imageBitmap from the ViewModel
+            if (imageBitmap != null) {
+                Image(bitmap = imageBitmap!!, contentDescription = "Object Detection Image")
             } else {
                 Text("No image yet", color = Color.DarkGray)
             }
@@ -80,22 +100,7 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
         // Detect Button
         Button(
             onClick = {
-                // Safe send: waits for WebSocket connection
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.Main) { responseText.value = "Waiting for connection..." }
-                    // Wait until WebSocket is connected
-                    while (!wsClient.isConnected()) {
-                        delay(100)
-                    }
-                    try {
-                        wsClient.sendMessage("capture")
-                        withContext(Dispatchers.Main) { responseText.value = "Requesting image..." }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            responseText.value = "Error sending capture: ${e.message}"
-                        }
-                    }
-                }
+                viewModel.sendMessage("capture")
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF9A7DFF),
@@ -120,7 +125,7 @@ fun ObjectDetectionScreen(navController: NavController, espIp: String = stringRe
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = responseText.value, color = Color.DarkGray, fontSize = 16.sp)
+            Text(text = responseText, color = Color.DarkGray, fontSize = 16.sp)
         }
     }
 }

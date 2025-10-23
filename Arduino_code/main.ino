@@ -3,8 +3,16 @@
 #include "esp_camera.h"
 
 // Replace with your WiFi credentials
-const char* ssid = "*******";
-const char* password = "*******";
+const char* ssid = "******";
+const char* password = "******";
+
+// SOS button pin
+#define SOS_PIN 2 // D1 on the XIAO ESP32-S3 Sense
+
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50; // 50ms
+int buttonState;
+int lastButtonState = HIGH;
 
 // WebSocket server
 WebSocketsServer webSocket = WebSocketsServer(8888);
@@ -76,10 +84,37 @@ void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t leng
   }
 }
 
+void checkSOSButton() {
+  int reading = digitalRead(SOS_PIN);
+
+  // If the switch changed, due to noise or pressing:
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    // If the button state has changed, after the delay:
+    if (reading != buttonState) {
+      buttonState = reading;
+      if (buttonState == HIGH) {
+        Serial.println("Button pressed! Sending SOS...");
+        
+        // Send the "SOS button" message to ALL connected clients
+        webSocket.broadcastTXT("SOS button");
+      }
+    }
+  }
+  // Save the reading for the next loop
+  lastButtonState = reading; 
+}
+
 void setup() {
   Serial.begin(115200);
 
-  // 🔹 Enable PSRAM (required for camera!)
+  pinMode(SOS_PIN, INPUT_PULLDOWN);
+  Serial.println("SOS Button initialized.");
+
+  //  Enable PSRAM (required for camera!)
   if(!psramFound()) {
     Serial.println("PSRAM not found – camera may fail!");
   }
@@ -111,4 +146,5 @@ void setup() {
 
 void loop() {
   webSocket.loop();
+  checkSOSButton();
 }

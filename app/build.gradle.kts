@@ -78,4 +78,7 @@ dependencies {
 
 // We'll also use the Accompanist library for cleaner permission handling in Compose
     implementation("com.google.accompanist:accompanist-permissions:0.31.5-beta") // Use a recent version
+
+    // In build.gradle.kts (Module :app)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
 }

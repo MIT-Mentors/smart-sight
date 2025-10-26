@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
@@ -15,32 +16,27 @@ import java.nio.ByteBuffer
 class ESPWebSocketClient(
     espIp: String,
     private val responseText: MutableState<String>,
-    private val imageBitmap: MutableState<androidx.compose.ui.graphics.ImageBitmap?>,
-    // 💡 Callback function to trigger ML Kit processing
+    private val imageBitmap: MutableState<ImageBitmap?>,
     private val onBitmapReady: (Bitmap, MutableState<String>) -> Unit
 ) {
-    private var connected = false
-    private val mainHandler = Handler(Looper.getMainLooper())
-    private val wsClient: WebSocketClient
 
-    // Websocket initialization
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val webSocketClient: WebSocketClient
+
     init {
         val wsUri = URI("ws://$espIp:8888/")
-        wsClient = object : WebSocketClient(wsUri) {
+        webSocketClient = object : WebSocketClient(wsUri) {
             override fun onOpen(handshakedata: ServerHandshake?) {
-                connected = true
                 Log.i("ESPWebSocketClient", "Connected to ESP32 at $espIp")
                 updateUi { responseText.value = "Connected to ESP32!" }
             }
 
             override fun onClose(code: Int, reason: String?, remote: Boolean) {
-                connected = false
                 Log.w("ESPWebSocketClient", "Disconnected: $reason (code=$code)")
                 updateUi { responseText.value = "Disconnected from ESP32" }
             }
 
             override fun onError(ex: Exception?) {
-                connected = false
                 Log.e("ESPWebSocketClient", "WebSocket error", ex)
                 updateUi { responseText.value = "WebSocket error: ${ex?.message}" }
             }
@@ -59,11 +55,9 @@ class ESPWebSocketClient(
                     if (bmp != null) {
                         Log.i("ESPWebSocketClient", "Received image (${byteArray.size} bytes)")
                         updateUi {
-                            // 1. Display the image
                             imageBitmap.value = bmp.asImageBitmap()
-                            // 2. Update status and call the object detection logic
                             responseText.value = "Image received. Analyzing objects..."
-                            onBitmapReady(bmp, responseText) // <--- Call to ML Kit detection
+                            onBitmapReady(bmp, responseText)
                         }
                     } else {
                         Log.w("ESPWebSocketClient", "Failed to decode image (${byteArray.size} bytes)")
@@ -75,17 +69,44 @@ class ESPWebSocketClient(
                 }
             }
         }
-        wsClient.connect()
+        // Attempt to connect when the object is created.
+        webSocketClient.connect()
     }
 
-    fun isConnected(): Boolean = connected
-    // Send message to ESP to request an image
+
+   //Checks if the WebSocket connection is currently open.
+     // This is the function that fixes the "Unresolved reference" error.
+
+    fun isOpen(): Boolean {
+        return webSocketClient.isOpen
+    }
+
+
+     //Checks if the WebSocket connection is currently closed.
+
+    fun isClosed(): Boolean {
+        return webSocketClient.isClosed
+    }
+
+
+     // Tells the WebSocket client to attempt to reconnect.
+     // This will be used in the Button's onClick logic.
+
+    fun reconnect() {
+        webSocketClient.reconnect()
+    }
+
+
+    // Sends a message to the ESP32 to request an image.
+     // It now uses the new isOpen() function for a more reliable check.
+
     fun sendMessage(message: String) {
-        if (connected) {
-            wsClient.send(message)
+        if (isOpen()) {
+            webSocketClient.send(message)
             Log.d("ESPWebSocketClient", "Sent message: $message")
         } else {
-            updateUi { responseText.value = "WebSocket not connected yet!" }
+            Log.w("ESPWebSocketClient", "Attempted to send message, but WebSocket is not connected.")
+            // The UI will handle showing a "connecting..." message, so no need to update it here.
         }
     }
 

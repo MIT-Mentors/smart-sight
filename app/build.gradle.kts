@@ -81,4 +81,7 @@ dependencies {
 
     // In build.gradle.kts (Module :app)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
+
+    // ML Kit Image Labeling (Appended for Object Detection feature)
+    implementation("com.google.mlkit:image-labeling:17.0.8")
 }

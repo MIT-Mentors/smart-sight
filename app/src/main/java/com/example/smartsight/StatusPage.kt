@@ -155,11 +155,7 @@ private fun StatusUi(btConnected: Boolean, netConnected: Boolean, batteryPct: In
 }
 
 
-/**
- * Checks if Bluetooth is enabled and if there's at least one bonded (paired) device.
- * This is a common simplified check for "Bluetooth readiness."
- * Requires BLUETOOTH_CONNECT permission on Android 12+ for accessing bondedDevices.
- */
+
 fun isBluetoothReadyAndDevicePaired(context: Context): Boolean {
     Log.d(APP_TAG, "BluetoothCheck: Starting isBluetoothReadyAndDevicePaired")
     try {

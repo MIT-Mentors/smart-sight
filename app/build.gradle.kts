@@ -15,7 +15,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        // Runner for instrumented Android tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -28,7 +27,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -36,81 +34,72 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
     buildFeatures {
         compose = true
-    }
-
-    // Allows using Android resources in unit tests
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-        unitTests.isIncludeAndroidResources = true
     }
 }
 
 dependencies {
-    // -----------------------------
-    // 🔹 Core Android + Compose
-    // -----------------------------
-    implementation("androidx.core:core-ktx:1.13.1")
+    // Core Android dependencies
+
+    implementation("androidx.core:core-ktx:1.13.1") // Update to this version or newer
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // Compose UI
+    // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // Navigation
+    // Jetpack Navigation for Compose
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.compose.material:material-icons-core:1.6.0")
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
 
-    // -----------------------------
-    // Feature Libraries
-    // -----------------------------
-    implementation("org.java-websocket:Java-WebSocket:1.5.3")
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
-    implementation("com.google.accompanist:accompanist-permissions:0.31.5-beta")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
-    implementation("com.google.mlkit:image-labeling:17.0.8")
-
-    // -----------------------------
-    // 🔹 Unit Testing
-    // -----------------------------
-    // JUnit 4 (core testing framework)
-    testImplementation("junit:junit:4.13.2")
-
-    // Mockito core + inline mocking support
-    testImplementation("org.mockito:mockito-core:5.11.0")
-    testImplementation("org.mockito:mockito-inline:5.11.0")
-
-    // Mockito Kotlin extensions
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
-
-    // Mockito JUnit runner (for @RunWith(MockitoJUnitRunner::class))
-    testImplementation("org.mockito:mockito-junit-jupiter:5.11.0")
-
-    // Coroutines testing (for runTest, etc.)
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
-
-    // AndroidX ViewModel + LiveData testing
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-
-    // -----------------------------
-    //  Instrumented (Android) Tests
-    // -----------------------------
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-
-    // Compose UI Testing
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-
-    // Debug tools for Compose
+    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Websockets
+    implementation("org.java-websocket:Java-WebSocket:1.5.3")
+
+    //database
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // In your build.gradle.kts file, inside the dependencies { ... } block
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
+// We'll also use the Accompanist library for cleaner permission handling in Compose
+    implementation("com.google.accompanist:accompanist-permissions:0.31.5-beta") // Use a recent version
+
+    // In build.gradle.kts (Module :app)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
+
+    // ML Kit Image Labeling (Appended for Object Detection feature)
+    implementation("com.google.mlkit:image-labeling:17.0.8")
+
+    testImplementation("junit:junit:4.13.2")
+
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("org.mockito:mockito-core:5.12.0")
+    androidTestImplementation("org.mockito:mockito-android:5.12.0")
+
+    // Unit test dependencies
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("com.google.android.gms:play-services-tasks:18.2.0")
+
+    // Add Robolectric
+    testImplementation("org.robolectric:robolectric:4.13")
+
+
+
 }

@@ -23,9 +23,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioManager
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalContext
+import kotlin.math.roundToInt
 
 @Composable // List of buttons to navigate to different screens
 fun DropDownScreen(navController: NavController){
+    //  Get Context and AudioManager
+    val context = LocalContext.current
+    val audioManager = remember {
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    }
+
+    //  Get max volume for the "Music" stream
+    val maxVolume = remember {
+        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+    }
+
+    // Create a state for the current volume
+    var currentVolume by remember {
+        mutableStateOf(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
+    }
+
+    // Create a state for the slider's position (a float between 0.0 and 1.0)
+    var sliderPosition by remember(currentVolume) {
+        // This recalculates the position when currentVolume changes
+        mutableStateOf(currentVolume.toFloat() / maxVolume.toFloat())
+    }
+
+    // Listen for system volume changes (physical buttons)
+    DisposableEffect(context) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (intent.action == "android.media.VOLUME_CHANGED_ACTION") {
+                    // Update our volume state when the system volume changes
+                    val newVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+                    currentVolume = newVolume
+                }
+            }
+        }
+
+        val filter = IntentFilter("android.media.VOLUME_CHANGED_ACTION")
+        context.registerReceiver(receiver, filter)
+
+        // Unregister the receiver when the composable is disposed
+        onDispose {
+            context.unregisterReceiver(receiver)
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFFEFEFEF)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
@@ -55,15 +106,27 @@ fun DropDownScreen(navController: NavController){
                 .padding(12.dp)
         ) {
             Text("Volume", modifier = Modifier.padding(start = 10.dp),color = Color.Black)
-            var sliderPosition by remember { mutableStateOf(0.5f) }
             Slider(
-                value = sliderPosition,
-                onValueChange = { sliderPosition = it },
+                value = sliderPosition, // Use our derived slider position
+                onValueChange = { newPosition ->
+
+                    sliderPosition = newPosition
+
+                    // Convert the float position (0.0 to 1.0) back to an Int volume
+                    val newVolume = (newPosition * maxVolume).roundToInt()
+
+                    // Set the system volume
+                    // The '0' flag means we don't want to show the system UI
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
+
+                    // Update our current volume state
+                    currentVolume = newVolume
+                },
                 colors = SliderDefaults.colors(
-                    thumbColor = Color(0xFF9A7DFF), // Color of the draggable thumb
-                    activeTrackColor = Color(0xFF9A7DFF), // Color of the track to the left of the thumb
-                    inactiveTrackColor = Color.Gray, // Color of the track to the right of the thumb
-                    activeTickColor = Color.Green, // Color of the ticks to the left of the thumb (if used)
+                    thumbColor = Color(0xFF9A7DFF),
+                    activeTrackColor = Color(0xFF9A7DFF),
+                    inactiveTrackColor = Color.Gray,
+                    activeTickColor = Color.Green,
                     inactiveTickColor = Color.LightGray)
             )
         }

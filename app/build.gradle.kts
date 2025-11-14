@@ -37,6 +37,12 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -67,12 +73,40 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // 1. For testing Coroutines (like viewModelScope)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // 2. For testing Architecture Components (to help with StateFlow)
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // 3. Mocking library (to create "fake" classes)
+    testImplementation("io.mockk:mockk:1.13.10")
+
     // Websockets
     implementation("org.java-websocket:Java-WebSocket:1.5.3")
 
     //database
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // Testing - Unit Tests
+    testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.22")
+
+    // Coroutines Test (already in your file)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Architecture Components Testing (already in your file)
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // MockK for mocking (already in your file)
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("io.mockk:mockk-android:1.13.10")
+
+    // Robolectric for Android components
+    testImplementation("org.robolectric:robolectric:4.11.1")
+
+    // Turbine for Flow testing (recommended)
+    testImplementation("app.cash.turbine:turbine:1.0.0")
     // In your build.gradle.kts file, inside the dependencies { ... } block
     implementation("com.google.android.gms:play-services-location:21.2.0")
 

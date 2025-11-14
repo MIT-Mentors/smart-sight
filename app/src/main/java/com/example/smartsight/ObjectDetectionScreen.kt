@@ -32,6 +32,17 @@ import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import java.util.*
 
+fun formatDetectionResults(resultLabels: List<Pair<String, Float>>): String {
+    return if (resultLabels.isEmpty()) {
+        "No highly confident objects detected."
+    } else {
+        "Detected objects are " + resultLabels.joinToString(", ") {
+            "${it.first} (${(it.second * 100).toInt()}%)"
+        }
+    }
+}
+
+
 /**
  * Runs ML Kit Image Labeling on the given Bitmap and executes a callback with the result.
  *
@@ -44,28 +55,21 @@ fun runObjectLabeling(
     bitmap: Bitmap,
     onResult: (String) -> Unit,
     context: Context,
-    speak: (String) -> Unit
+    speak: (String) -> Unit,
+    labeler: com.google.mlkit.vision.label.ImageLabeler =
+        com.google.mlkit.vision.label.ImageLabeling.getClient(
+            com.google.mlkit.vision.label.defaults.ImageLabelerOptions.Builder()
+                .setConfidenceThreshold(0.7f)
+                .build()
+        )
 ) {
-    // 1. Prepare InputImage for ML Kit
-    val image = InputImage.fromBitmap(bitmap, 0)
-    // 2. Set options: Using a confidence threshold (0.7f or 70%)
-    val options = ImageLabelerOptions.Builder()
-        .setConfidenceThreshold(0.7f)
-        .build()
+    val image = com.google.mlkit.vision.common.InputImage.fromBitmap(bitmap, 0)
 
-    val labeler = ImageLabeling.getClient(options)
-
-    // 3. Process the image
     labeler.process(image)
         .addOnSuccessListener { resultLabels ->
-            val result = if (resultLabels.isEmpty()) {
-                "No highly confident objects detected."
-            } else {
-                "Detected objects are " + resultLabels.joinToString(", ") {
-                    // Example: "cat (95%)"
-                    "${it.text} (${(it.confidence * 100).toInt()}%)"
-                }
-            }
+            val result = formatDetectionResults(
+                resultLabels.map { it.text to it.confidence }
+            )
             onResult(result)
             speak(result)
         }
@@ -75,6 +79,8 @@ fun runObjectLabeling(
             speak(errorMsg)
         }
 }
+
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

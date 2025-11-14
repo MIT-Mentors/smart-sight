@@ -118,4 +118,22 @@ dependencies {
 
     // ML Kit Image Labeling (Appended for Object Detection feature)
     implementation("com.google.mlkit:image-labeling:17.0.8")
+
+    testImplementation("junit:junit:4.13.2")
+
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("org.mockito:mockito-core:5.12.0")
+    androidTestImplementation("org.mockito:mockito-android:5.12.0")
+
+    // Unit test dependencies
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("com.google.android.gms:play-services-tasks:18.2.0")
+
+    // Add Robolectric
+    testImplementation("org.robolectric:robolectric:4.13")
+
+
+
 }

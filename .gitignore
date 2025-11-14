@@ -26,5 +26,3 @@ local.properties
 .externalNativeBuild
 .cxx
 
-# Local Instrument Test
-/app/src/androidTest

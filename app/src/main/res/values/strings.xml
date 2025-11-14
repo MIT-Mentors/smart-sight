@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Smart Sight</string>
-    <string name="ESP_IP">192.168.43.82</string>
+    <string name="ESP_IP">10.250.81.82</string>
     <string name="speechScripts">The morning sunlight filtered gently through the half-drawn curtains, casting golden streaks across the wooden floor. Outside, the faint hum of the city was just beginning to rise—a blend of distant car horns, chirping birds, and the soft rustle of leaves in the breeze. A cup of coffee sat steaming on the table, untouched, as if waiting for its moment of importance. Inside, everything felt suspended between calm and possibility, the kind of quiet that hints something new might be about to begin.</string>
 </resources>

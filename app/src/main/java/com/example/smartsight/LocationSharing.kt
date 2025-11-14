@@ -37,8 +37,6 @@ import com.google.android.gms.location.Priority
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-data class ContactList(val name: String, val contacts: MutableList<String>)
-
 // Helper function to fetch contacts from the device
 fun fetchContacts(contentResolver: ContentResolver): List<String> {
     val contactsList = mutableListOf<String>()

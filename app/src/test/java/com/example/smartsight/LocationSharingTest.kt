@@ -60,9 +60,9 @@ class LocationSharingTest {
      */
     @Test
     fun `parseNumber extracts digits correctly`() {
-        val input = "John (+91 98765 43210)"
+        val input = "John (+91 999995555553)"
         val result = parseNumber(input)
-        assertEquals("919876543210", result)
+        assertEquals("91999995555553", result)
     }
 
     /**
@@ -193,7 +193,7 @@ class LocationSharingTest {
             )
         } returns mockk(relaxed = true)
 
-        sendSMS(context, "9876543210", "Test", 1)
+        sendSMS(context, "999995555553", "Test", 1)
 
         // Verify that a 'Failed' Toast was displayed
         verify {

@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import java.util.*
 
 
-private fun initializeTextToSpeech(
+ fun initializeTextToSpeech(
     context: Context,
     onInitialized: (TextToSpeech) -> Unit
 ) {

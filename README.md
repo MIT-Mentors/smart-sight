@@ -163,7 +163,9 @@ After decoding the received image into a Bitmap, the app performs object recogni
 **Example Output**
 
 If a chair, bottle, and laptop are present:
-               Detected Objects: Chair, Bottle, Laptop
+
+         Detected Objects: Chair, Bottle, Laptop
+
 These labels are then announced aloud through the system TTS engine.
 
 **Text-to-Speech Output (Read Aloud)**

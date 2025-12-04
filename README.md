@@ -160,11 +160,13 @@ After decoding the received image into a Bitmap, the app performs object recogni
           - Forwarded to Text-to-Speech to be spoken aloud for visually challenged users
 
 **Example Output**
+
 If a chair, bottle, and laptop are present:
                Detected Objects: Chair, Bottle, Laptop
 These labels are then announced aloud through the system TTS engine.
 
 **Text-to-Speech Output (Read Aloud)**
+
 To assist visually challenged users, Smart Sight converts the detected object labels into speech.
 
 **How it works:**
@@ -173,9 +175,14 @@ To assist visually challenged users, Smart Sight converts the detected object la
 - Speech is clear, concise, and triggered instantly after object detection
 
 **Example:**
-         If ML Kit detects → ["Chair", "Bottle"]
+
+
+If ML Kit detects → ["Chair", "Bottle"]
+
 The app speaks:
+         
          “Chair, Bottle detected.”
+
 This allows the user to understand their surroundings without needing to view the screen.
 
 ## Key Files
@@ -187,7 +194,7 @@ This allows the user to understand their surroundings without needing to view th
 1. [MainActivity.kt](app/src/main/java/com/example/smartsight/MainActivity.kt) – App entry & navigation  
 2. [ObjectDetectionScreen.kt](app/src/main/java/com/example/smartsight/ObjectDetectionScreen.kt)– UI for capture + Preview + Detects object + Read aloud  
 3. [SendPhoto.kt](app/src/main/java/com/example/smartsight/SendPhoto.kt) – Receives image from ESP32 ans sends it to app UI  
-4. [SharedViewModel.kt](app/src/main/java/com/example/smartsight/SendPhoto.kt) – Centeralized webSocket handling 
+4. [SharedViewModel.kt](app/src/main/java/com/example/smartsight/SharedViewModel.kt) – Centeralized webSocket handling 
 ---
 
 ## Installation & Setup

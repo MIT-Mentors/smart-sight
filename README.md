@@ -18,7 +18,6 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 
 ---
 
-
 ## Hardware List
 - Seeed Studio XIAO ESP32-S3 Sense  
 - 3.7V Li-Po rechargeable battery  
@@ -343,5 +342,86 @@ Ensure the following permissions are declared in AndroidManifest.xml:
     <uses-permission android:name="android.permission.INTERNET" />
 
 4. Build & Run the App on an Android Device
+
+---
+
+## SOS Emergency Alert Feature
+
+The SOS system provides an instant emergency alert mechanism for visually challenged users. Unlike typical app-based SOS buttons, Smart Sight uses a physical push-button built into the wearable glasses, ensuring the user can activate help without needing to operate the phone interface.
+
+When the button on the ESP32 Smart Glasses is pressed, the event is transmitted to the mobile application through a WebSocket connection. The app immediately retrieves the user’s current location and automatically shares it with the saved emergency contacts in the Priority List.
+
+This guarantees a fast, reliable, and hands-free emergency alert process.
+
+###System Architecture
+**1. Hardware (ESP32-S3 with Pushbutton)**
+- ESP32 runs a WebSocket server on a predefined port
+- A dedicated physical pushbutton is connected to a GPIO pin
+- On button press:
+        - ESP32 sends a WebSocket message like "SOS_button" to the Android app
+        - No image capture or camera processing involved
+- Requires only WiFi connection (same network as the Android app)
+
+This design ensures the SOS trigger is accessible, fast, and independent of the phone UI.
+
+**2. Android Application Logic**
+
+When the app receives "SOS_button" from the ESP:
+
+**a. WebSocket Listener**
+- Continuously listens for incoming messages from ESP32
+- If the message equals "SOS_button" → SOS workflow begins automatically
+
+**b. Location Fetching**
+Uses Fused Location Provider to get:
+     - Latitude
+     - Longitude
+     - Google Maps shareable link
+
+**c. Location Delivery**
+- The app automatically sends the user’s current location to:
+- All contacts saved in the Priority List under Location Sharing feature
+- The message includes:
+      - Emergency alert text
+      - Full location details
+      - Maps link
+
+This runs without requiring any touch interaction from the user.
+
+---
+
+### How SOS Works (Internal Workflow)
+
+1. User presses the pushbutton on Smart Sight glasses
+2. ESP32 detects the interrupt and sends:
+
+     SOS_button
+
+to the app through WebSocket
+
+3. Android app receives this message instantly
+4. App fetches location (GPS / network-based)
+5. App formats emergency message including:
+
+       EMERGENCY ALERT!
+       I need immediate help.
+       Latitude: 12.92109
+       Longitude: 80.12345
+       Google Maps Link: https://maps.google.com/?q=12.92109,80.12345
+
+6. App sends the location to all Priority List contacts
+7. Everything happens automatically within a few seconds.
+
+---
+
+## Key Files
+
+### ESP32 (Arduino)
+1.[main.ino](Arduino_code/main.ino) – WiFi setup, WebSocket server, Pushbutton GPIO interrupt, Sends "SOS_button" message upon button press
+
+### Android App (Kotlin)
+1. [MainActivity.kt](app/src/main/java/com/example/smartsight/MainActivity.kt) – App entry & navigation  
+2. [LocationSharing.kt](app/src/main/java/com/example/smartsight/LocationSharing.kt)– UI for addind contacts in priority list   
+3. [SharedViewModel.kt](app/src/main/java/com/example/smartsight/SharedViewModel.kt) – Triggers SOS feature by sending "SOS_button" through websockets to the app
 
 ---

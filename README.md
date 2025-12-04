@@ -429,7 +429,7 @@ to the app through WebSocket
 
 ---
 
-**Installation & Setup**
+## Installation & Setup
 
 **ESP32 Setup**
 1. Install ESP32 board in Arduino IDE

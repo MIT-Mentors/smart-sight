@@ -353,7 +353,8 @@ When the button on the ESP32 Smart Glasses is pressed, the event is transmitted 
 
 This guarantees a fast, reliable, and hands-free emergency alert process.
 
-###System Architecture
+### System Architecture
+
 **1. Hardware (ESP32-S3 with Pushbutton)**
 - ESP32 runs a WebSocket server on a predefined port
 - A dedicated physical pushbutton is connected to a GPIO pin
@@ -395,7 +396,7 @@ This runs without requiring any touch interaction from the user.
 1. User presses the pushbutton on Smart Sight glasses
 2. ESP32 detects the interrupt and sends:
 
-     SOS_button
+       SOS_button
 
 to the app through WebSocket
 
@@ -425,3 +426,20 @@ to the app through WebSocket
 3. [SharedViewModel.kt](app/src/main/java/com/example/smartsight/SharedViewModel.kt) – Triggers SOS feature by sending "SOS_button" through websockets to the app
 
 ---
+
+**Installation & Setup**
+
+**ESP32 Setup**
+1. Install ESP32 board in Arduino IDE
+2. Flash the main.ino file
+3. Connect pushbutton to configured GPIO pin
+4. Update WiFi credentials
+5. Ensure ESP and Android device are on the same WiFi network
+6. Confirm WebSocket initializes and prints "Waiting for client..."
+
+**Android App Setup**
+1. Clone the repository and open in Android Studio
+2. Update ESP32 WebSocket IP address in ESPWebSocketClient.kt
+3. Add Priority contacts in the Location Sharing section
+4. Install the app on an Android device
+5. Turn ON GPS for accurate SOS updates

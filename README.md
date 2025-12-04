@@ -122,22 +122,61 @@ It checks device readiness (Bluetooth, Internet, Battery) before allowing the us
 |![berfore connection](Assets/Documents/before_connection.jpeg)|![after connection](Assets/Documents/after_connection.jpeg)|
 
 ---
-## Object Detection
+## Object Detection Feature
 
 ### System Architecture
 
 **Hardware (ESP32-S3 Sense)**  
-- Acts as a WebSocket server on port `8888`  
-- Captures images through its onboard **OV2640** camera sensor  
-- On receiving a `capture` command, it transmits a compressed JPEG buffer to the connected Android client  
+- Acts as a WebSocket server on port 8888
+- Captures images using its OV2640 camera sensor
+- On receiving a "capture" command from the Android app, it:
+          - Captures a frame
+          - Compresses it into JPEG
+          - Sends the byte stream to the Android application in real time 
 
 **Android Application**  
-- Built with Kotlin and Jetpack Compose  
-- Contains the Object Detection screen responsible for image acquisition  
-- Uses the `ESPWebSocketClient` class for real-time communication with the ESP32  
-- Decodes incoming JPEG bytes into a `Bitmap` and renders the image on screen  
+- Built with Kotlin + Jetpack Compose
+- Contains the Object Detection Screen for:
+          - Sending capture commands
+          - Receiving live JPEG image frames over WebSocket
+          - Rendering preview on the UI
+- Uses the custom ESPWebSocketClient class for high-speed, low-latency communication
+- Converts incoming JPEG bytes into a Bitmap via BitmapFactory.decodeByteArray()
+- Displays the received frame on screen
 
 ---
+
+**Object Processing Pipeline (ML Kit Image Labeling)**
+After decoding the received image into a Bitmap, the app performs object recognition using:
+- Google ML Kit – Image Labeling API
+- On-device processing (no internet required)
+
+**Steps**
+- The received image frame is converted into an InputImage.
+- ML Kit runs a lightweight object classifier and produces a list of labels with confidence scores.
+- These detected objects are:
+          - Displayed on the screen
+          - Stored in a dynamic result list
+          - Forwarded to Text-to-Speech to be spoken aloud for visually challenged users
+
+**Example Output**
+If a chair, bottle, and laptop are present:
+               Detected Objects: Chair, Bottle, Laptop
+These labels are then announced aloud through the system TTS engine.
+
+**Text-to-Speech Output (Read Aloud)**
+To assist visually challenged users, Smart Sight converts the detected object labels into speech.
+
+**How it works:**
+- The result list from ML Kit is joined into a readable sentence
+- Android TextToSpeech engine speaks the result automatically
+- Speech is clear, concise, and triggered instantly after object detection
+
+**Example:**
+         If ML Kit detects → ["Chair", "Bottle"]
+The app speaks:
+         “Chair, Bottle detected.”
+This allows the user to understand their surroundings without needing to view the screen.
 
 ## Key Files
 
@@ -146,9 +185,9 @@ It checks device readiness (Bluetooth, Internet, Battery) before allowing the us
 
 ### Android App (Kotlin)
 1. [MainActivity.kt](app/src/main/java/com/example/smartsight/MainActivity.kt) – App entry & navigation  
-2. [ObjectDetectionScreen.kt](app/src/main/java/com/example/smartsight/ObjectDetectionScreen.kt)– UI for capture + preview  
-3. [SendPhoto.kt](app/src/main/java/com/example/smartsight/SendPhoto.kt) – WebSocket handling  
-
+2. [ObjectDetectionScreen.kt](app/src/main/java/com/example/smartsight/ObjectDetectionScreen.kt)– UI for capture + Preview + Detects object + Read aloud  
+3. [SendPhoto.kt](app/src/main/java/com/example/smartsight/SendPhoto.kt) – Receives image from ESP32 ans sends it to app UI  
+4. [SharedViewModel.kt](app/src/main/java/com/example/smartsight/SendPhoto.kt) – Centeralized webSocket handling 
 ---
 
 ## Installation & Setup
@@ -175,3 +214,8 @@ It checks device readiness (Bluetooth, Internet, Battery) before allowing the us
 
 ### Flow Chart
 ![FlowChart](Assets/Documents/flowchart.png)
+
+---
+
+## Location Sharing Feature
+

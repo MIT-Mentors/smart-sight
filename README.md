@@ -278,6 +278,7 @@ Contains most important contacts
 - For sending location to a single person
 
 All contact lists are stored securely within the device.
+
 ---
 
 **Location Sharing Workflow**
@@ -317,6 +318,30 @@ The app then:
 
 ### Android App (Kotlin)
 1. [MainActivity.kt](app/src/main/java/com/example/smartsight/MainActivity.kt) – App entry & navigation  
-2. [LocationSharing.kt](app/src/main/java/com/example/smartsight/LocationSharing.kt)– UI for sharing location 
+2. [LocationSharing.kt](app/src/main/java/com/example/smartsight/LocationSharing.kt)– UI for sharing location
+
 ---
 
+**Android App Setup**
+
+Follow these steps to enable and test the Location Sharing feature inside the app:
+
+1. Clone the Repository
+
+Download or clone the complete project to your local machine.
+
+2. Open in Android Studio
+
+Open the project folder in Android Studio Hedgehog or above.
+
+3. Enable Required Permissions
+
+Ensure the following permissions are declared in AndroidManifest.xml:
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+4. Build & Run the App on an Android Device
+
+---

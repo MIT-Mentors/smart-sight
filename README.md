@@ -229,3 +229,94 @@ This allows the user to understand their surroundings without needing to view th
 
 ## Location Sharing Feature
 
+The Location Sharing module enables visually challenged users to safely and quickly share their real-time GPS location with trusted contacts. This system is designed with reliability, simplicity, and accessibility in mind — ensuring that help can be reached when needed.
+
+### System Architecture
+
+**Android Application**
+
+The Android app handles:
+- Real-time GPS location acquisition
+- Contact group creation
+- Priority list management
+- Sharing location via SMS or preferred communication channel
+
+**Core Components**
+
+The Location Sharing module consists of:
+
+**1. GPS Location Fetching**
+
+Uses Android’s FusedLocationProviderClient
+
+Retrieves:
+      - Latitude
+      - Longitude
+
+Locations are fetched only with explicit permission from the user.
+
+**2. Contact Management**
+
+Users can manage contacts in three ways:
+
+**A. Create List**
+- User adds multiple contacts
+- Assigns a custom group name
+- Stores the list locally for repeated use
+- Allows users to create reusable groups of contacts
+(e.g., “Family”, “Emergency Team”)
+
+**B. Priority List**
+- Contains pre-saved emergency contacts
+- Automatically used during the SOS Emergency Feature
+- Used by default for SOS-triggered alerts
+Contains most important contacts
+
+**C. Select a Contact**
+- Choose a single person from the saved contacts
+- Ideal for one-time sharing
+- For sending location to a single person
+
+All contact lists are stored securely within the device.
+---
+
+**Location Sharing Workflow**
+
+After selecting contact(s), the user presses the Share (≻) button.
+The app then:
+
+  - Fetches real-time GPS coordinates
+  - Formats a clean, readable location message
+  - Sends it to all selected contacts
+
+**Example message:**
+
+      Smart Sight Location Update:
+      Latitude: 12.92109
+      Longitude: 80.12345
+      Google Maps Link: https://maps.google.com/?q=12.92109,80.12345
+
+**Steps to Use Location Sharing**
+1. Open Location Sharing from the home screen
+2. Choose from:
+       - Create List
+       - Priority List
+       - Select a Contact
+3. Select one or more recipients
+4. Tap the Share (≻) button
+5. App collects GPS data
+6. Sends the formatted location message
+
+**Requirements for Proper Functioning**
+- GPS must be turned ON
+- SMS permission must be granted (if sharing via SMS)
+- Internet connection (optional but helpful for maps link resolution)
+---
+
+## Key Files
+
+### Android App (Kotlin)
+1. [MainActivity.kt](app/src/main/java/com/example/smartsight/MainActivity.kt) – App entry & navigation  
+2. [LocationSharing.kt](app/src/main/java/com/example/smartsight/LocationSharing.kt)– UI for sharing location 
+---
+

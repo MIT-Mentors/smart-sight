@@ -374,7 +374,9 @@ When the app receives "SOS_button" from the ESP:
 - If the message equals "SOS_button" → SOS workflow begins automatically
 
 **b. Location Fetching**
+
 Uses Fused Location Provider to get:
+
      - Latitude
      - Longitude
      - Google Maps shareable link

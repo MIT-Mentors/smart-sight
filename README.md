@@ -147,6 +147,7 @@ It checks device readiness (Bluetooth, Internet, Battery) before allowing the us
 ---
 
 **Object Processing Pipeline (ML Kit Image Labeling)**
+
 After decoding the received image into a Bitmap, the app performs object recognition using:
 - Google ML Kit – Image Labeling API
 - On-device processing (no internet required)

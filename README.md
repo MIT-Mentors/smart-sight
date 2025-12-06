@@ -217,7 +217,7 @@ This allows the user to understand their surroundings without needing to view th
 ---
 
 ## Object Detection Demo Video
-![Demo Video](Assets/Documents/ObjectDetection.gif)
+![Demo Video](Assets/Documents/ObjectDetectionDemo.gif)
 
 ---
 
@@ -344,7 +344,6 @@ Ensure the following permissions are declared in AndroidManifest.xml:
 4. Build & Run the App on an Android Device
 
 ## Location Sharing Demo Video
-![Demo Video](Assets/Documents/ObjectDetection.gif)
 
 ---
 
@@ -450,4 +449,17 @@ to the app through WebSocket
 5. Turn ON GPS for accurate SOS updates
 
 ## SOS Demo Video
-![Demo Video](Assets/Documents/ObjectDetection.gif)
+
+## Existing Bugs
+
+1. Dynamic IP problem
+2. Auto connection of websockets - when websocket is disconnected, app needs to restart to initiate connection again.
+3. App will not work in background.
+4. Latency while fetching image from the camera
+
+## Future development Ideas
+
+1. Voice assistant navigation feature
+2. Voice assistant document reading feature
+3. Accessibility of implemented features through voice command
+4. Make app to run in background

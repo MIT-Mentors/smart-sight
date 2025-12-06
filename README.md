@@ -292,9 +292,9 @@ The app then:
 **Example message:**
 
       Smart Sight Location Update:
-      Latitude: 12.92109
-      Longitude: 80.12345
-      Google Maps Link: https://maps.google.com/?q=12.92109,80.12345
+      Latitude: xx.xxxxx
+      Longitude: yy.yyyyy
+      Google Maps Link: https://maps.google.com/?q=xx.xxxxx,yy.yyyyy
 
 **Steps to Use Location Sharing**
 1. Open Location Sharing from the home screen
@@ -342,6 +342,9 @@ Ensure the following permissions are declared in AndroidManifest.xml:
     <uses-permission android:name="android.permission.INTERNET" />
 
 4. Build & Run the App on an Android Device
+
+## Location Sharing Demo Video
+![Demo Video](Assets/Documents/ObjectDetection.gif)
 
 ---
 
@@ -408,9 +411,9 @@ to the app through WebSocket
 
        EMERGENCY ALERT!
        I need immediate help.
-       Latitude: 12.92109
-       Longitude: 80.12345
-       Google Maps Link: https://maps.google.com/?q=12.92109,80.12345
+       Latitude: xx.xxxxx
+       Longitude: yy.yyyyy
+       Google Maps Link: https://maps.google.com/?q=xx.xxxxx,yy.yyyyy
 
 6. App sends the location to all Priority List contacts
 7. Everything happens automatically within a few seconds.
@@ -445,3 +448,6 @@ to the app through WebSocket
 3. Add Priority contacts in the Location Sharing section
 4. Install the app on an Android device
 5. Turn ON GPS for accurate SOS updates
+
+## SOS Demo Video
+![Demo Video](Assets/Documents/ObjectDetection.gif)

@@ -1,4 +1,4 @@
-# Smart Sight: Assistive Smart Glasses for the Visually Challenged 
+# Smart Sight: Assistive Smart Glasses for the Visually Challenged People
 
 | Smart Glass                                  | 
 |----------------------------------------------------|

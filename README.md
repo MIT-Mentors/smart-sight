@@ -4,13 +4,13 @@
 
 Smart Sight is an innovative project focused on developing smart glasses designed to assist visually challenged individuals. The goal of this project is to leverage advanced technologies such as computer vision, audio feedback, and real-time object detection to enhance the independence and quality of life for people with visual impairments.
 
-|![Smart Glass](Assets/Documents/SmartGlass2.jpeg)
+| Top View                                  |   Rear View                            |
+|----------------------------------------------------|------------------------------------------------|
+|![Top View](Assets/Documents/SmartGlass2.jpeg)|![Rear view](Assets/Documents/SmartGlass3.jpeg)|
 
-|![Smart Glass](Assets/Documents/SmartGlass3.jpeg)
-
-|![Smart Glass](Assets/Documents/SmartGlass4.jpeg)
-
-|![Smart Glass](Assets/Documents/SmartGlass5.jpeg)
+| Lateral View                                  | 
+|----------------------------------------------------|
+|![Side View](Assets/Documents/SmartGlass4.jpeg)
 
 ---
 

@@ -232,8 +232,9 @@ This allows the user to understand their surroundings without needing to view th
 
 ---
 
-## Object Detection Demo Video
-![Demo Video](Assets/Documents/ObjectDetectionDemo.gif)
+|  Object Detection Demo Video                               | 
+|----------------------------------------------------|
+|![Location Sharing Demo Video](Assets/Documents/ObjectDetectionDemo.gif)
 
 ---
 
@@ -359,8 +360,10 @@ Ensure the following permissions are declared in AndroidManifest.xml:
 
 4. Build & Run the App on an Android Device
 
+---
 
-| ## Location Sharing Demo Video                               | 
+
+|  Location Sharing Demo Video                       | 
 |----------------------------------------------------|
 |![Location Sharing Demo Video](Assets/Documents/LocationSharingDemo.gif)
 
@@ -468,9 +471,13 @@ to the app through WebSocket
 4. Install the app on an Android device
 5. Turn ON GPS for accurate SOS updates
 
-| ## SOS Demo Video                               | 
+---
+
+| SOS Demo Video                               | 
 |----------------------------------------------------|
 |![SOS Demo Video](Assets/Documents/SOSDemo.gif)
+
+---
 
 ## Existing Bugs
 

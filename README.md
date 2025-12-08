@@ -1,5 +1,7 @@
 # Smart Sight: Assistive Smart Glasses for the Visually Challenged
 
+|![Smart Glass](Assets/Documents/SmartGlass1.jpeg)
+
 Smart Sight is an innovative project focused on developing smart glasses designed to assist visually challenged individuals. The goal of this project is to leverage advanced technologies such as computer vision, audio feedback, and real-time object detection to enhance the independence and quality of life for people with visual impairments.
 
 ---

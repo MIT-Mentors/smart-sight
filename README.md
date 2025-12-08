@@ -1,6 +1,18 @@
-# Smart Sight: Assistive Smart Glasses for the Visually Challenged
+# Smart Sight: Assistive Smart Glasses for the Visually Challenged People
+
+| Smart Glass                                  | 
+|----------------------------------------------------|
+|![Smart Glass](Assets/Documents/SmartGlass1.jpeg)
 
 Smart Sight is an innovative project focused on developing smart glasses designed to assist visually challenged individuals. The goal of this project is to leverage advanced technologies such as computer vision, audio feedback, and real-time object detection to enhance the independence and quality of life for people with visual impairments.
+
+| Top View                                  |   Rear View                            |
+|----------------------------------------------------|------------------------------------------------|
+|![Top View](Assets/Documents/SmartGlass2.jpeg)|![Rear view](Assets/Documents/SmartGlass3.jpeg)|
+
+| Lateral View                                  | 
+|----------------------------------------------------|
+|![Side View](Assets/Documents/SmartGlass4.jpeg)
 
 ---
 
@@ -47,6 +59,10 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 
 The current prototype of Smart Sight uses the **Seeed Studio XIAO ESP32-S3 Sense**, which has the **OV2640 camera module integrated directly onto the board**.  
 As of now, no external wiring is required between the ESP32 and the camera module.
+
+| Connection Diagram                                 | 
+|----------------------------------------------------|
+|![Connection Diagram](Assets/Documents/ConnectionDiagram.jpeg)
 
 
 ### Notes
@@ -216,8 +232,9 @@ This allows the user to understand their surroundings without needing to view th
 
 ---
 
-## Object Detection Demo Video
-![Demo Video](Assets/Documents/ObjectDetectionDemo.gif)
+|  Object Detection Demo Video                               | 
+|----------------------------------------------------|
+|![Location Sharing Demo Video](Assets/Documents/ObjectDetectionDemo.gif)
 
 ---
 
@@ -343,7 +360,13 @@ Ensure the following permissions are declared in AndroidManifest.xml:
 
 4. Build & Run the App on an Android Device
 
-## Location Sharing Demo Video
+---
+
+
+|  Location Sharing Demo Video                       | 
+|----------------------------------------------------|
+|![Location Sharing Demo Video](Assets/Documents/LocationSharingDemo.gif)
+
 
 ---
 
@@ -448,7 +471,13 @@ to the app through WebSocket
 4. Install the app on an Android device
 5. Turn ON GPS for accurate SOS updates
 
-## SOS Demo Video
+---
+
+| SOS Demo Video                               | 
+|----------------------------------------------------|
+|![SOS Demo Video](Assets/Documents/SOSDemo.gif)
+
+---
 
 ## Existing Bugs
 

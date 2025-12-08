@@ -1,5 +1,7 @@
 # Smart Sight: Assistive Smart Glasses for the Visually Challenged 
 
+| Smart Glass                                  | 
+|----------------------------------------------------|
 |![Smart Glass](Assets/Documents/SmartGlass1.jpeg)
 
 Smart Sight is an innovative project focused on developing smart glasses designed to assist visually challenged individuals. The goal of this project is to leverage advanced technologies such as computer vision, audio feedback, and real-time object detection to enhance the independence and quality of life for people with visual impairments.
@@ -57,6 +59,10 @@ Smart Sight aims to bridge the accessibility gap by empowering visually challeng
 
 The current prototype of Smart Sight uses the **Seeed Studio XIAO ESP32-S3 Sense**, which has the **OV2640 camera module integrated directly onto the board**.  
 As of now, no external wiring is required between the ESP32 and the camera module.
+
+| Connection Diagram                                 | 
+|----------------------------------------------------|
+|![Connection Diagram](Assets/Documents/ConnectionDiagram.jpeg)
 
 
 ### Notes
